@@ -1,3 +1,5 @@
+// i'm dating tmas <3
+
 // wallkicks https://tetris.fandom.com/wiki/SRS
 wallKickx = [8][4], wallKicky = [8][4]; 
 initWallkicks()
