@@ -1,0 +1,1 @@
+GAMEBOARD = document.getElementById("game-board")
