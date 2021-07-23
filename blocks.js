@@ -4,7 +4,7 @@ initWallkicks()
 
 // initializing the wallkicks
 function initWallkicks() {
-    for (var i = 0; i < 8; ++i){
+    for (var i = 0; i < 8; i++){
         wallKickx[i] = [0, 1, 1, 0, 1]; 
         if (i==0 || i==3 || i==5 || i==6) {
             for (var j = 0; j < 5; j++) wallKickx[i][j] *= -1; 
