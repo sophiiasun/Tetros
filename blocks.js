@@ -52,6 +52,29 @@ function Block(x, y, type, rot){ // vs code suggests to change to class? lmk if 
             this.xArray[i] *= -1; 
         }
     }
+    this.flip = function(){ // (x,y ) ==> (-y, x)
+        for(var i = 0; i < 4; i++){
+            this.xArray[i] *= -1; this.yArray[i] *=-1;  
+        }
+    }
 }
 
+// randomized shuffling : https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffle(array) {
+    var currentIndex = array.length,  randomIndex;
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+function blockGenerator(){
+    var arr = [7]; 
+    for(var i = 0; i < 7; i++){
+        arr[i] = new Block(0, 0, i, 0); 
+    }
+    arr = shuffle(arr); 
+    return arr; 
 }
