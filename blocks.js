@@ -41,15 +41,17 @@ function Block(x, y, type, rot){ // vs code suggests to change to class? lmk if 
         this.xArray = [-1, 0, 0, 1]; this.yArray = [1, 1, 0, 0];
     }   
     this.rotateClockwise = function(){ // (x, y) ==> (y, -x); 
-        var tmp = this.xArray; this.xArray = this.yArray; this.yArray = this.xArray; 
-        for(var i = 0; i < 4; i++)
+        for(var i = 0; i < 4; i++){
+            var tmp = this.xArray[i]; this.xArray[i] = this.yArray[i];  this.yArray[i] = tmp; 
             this.yArray[i] *= -1; 
+        }
     }
     this.rotateCounterClockwise = function(){ // (x,y ) ==> (-y, x)
-        var tmp = this.xArray; this.xArray = this.yArray; this.yArray = this.xArray; 
-        for(var i = 0; i < 4; i++)
+        for(var i = 0; i < 4; i++){
+            var tmp = this.xArray[i]; this.xArray[i] = this.yArray[i]; this.yArray[i] = tmp; 
             this.xArray[i] *= -1; 
+        }
     }
 }
 
-var tmp = new Block(0, 0, 1, 1); 
+}
