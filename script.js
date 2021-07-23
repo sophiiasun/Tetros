@@ -1,3 +1,4 @@
+ON_HOLD = document.getElementById("hold-block")
 GAMEBOARD = document.getElementById("game-board")
 
 gameboard = []
