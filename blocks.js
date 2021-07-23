@@ -1,9 +1,6 @@
-// i'm dating tmas <3
-
 // wallkicks https://tetris.fandom.com/wiki/SRS
-wallKickx = [8][4], wallKicky = [8][4]; 
+var wallKickx = [8], wallKicky = [8]; 
 initWallkicks()
-
 // initializing the wallkicks
 function initWallkicks() {
     for (var i = 0; i < 8; i++){
@@ -45,12 +42,14 @@ function Block(x, y, type, rot){ // vs code suggests to change to class? lmk if 
     }   
     this.rotateClockwise = function(){ // (x, y) ==> (y, -x); 
         var tmp = this.xArray; this.xArray = this.yArray; this.yArray = this.xArray; 
-        for(var i = 0; i < 4; ++i)
+        for(var i = 0; i < 4; i++)
             this.yArray[i] *= -1; 
     }
     this.rotateCounterClockwise = function(){ // (x,y ) ==> (-y, x)
         var tmp = this.xArray; this.xArray = this.yArray; this.yArray = this.xArray; 
-        for(var i = 0; i < 4; ++i)
+        for(var i = 0; i < 4; i++)
             this.xArray[i] *= -1; 
     }
 }
+
+var tmp = new Block(0, 0, 1, 1); 
