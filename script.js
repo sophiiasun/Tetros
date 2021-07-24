@@ -7,7 +7,6 @@ TEMPLATE = document.getElementById("template")
 // COMING_BLOCKS = document.getElementById("coming-blocks")
 
 // board = [] // ENTIRE CSS GRID
-gameboard = [] // PLAYABLE GRID (where the blocks can be placed)
 data = []
 
 document.onkeydown = function(e) {

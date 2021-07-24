@@ -17,8 +17,8 @@
 		}
 
         #template {
-            background-color: blue;
-            width: 66vmin;
+            background-color: black;
+            width: 67vmin;
             height: 90vmin;
             display: grid;
             grid-template-rows: repeat(5, 1fr);
@@ -26,52 +26,77 @@
         }
 
         .title {
-            background-color: aquamarine;
+            background-color: #CFFFD9;
             width: 66vmin;
-            height: 8vmin;
+            height: 7vmin;
             grid-column: 1/4;
+            border-style: none none solid none;
+            border-color: #CFFFD9 #CFFFD9 black #CFFFD9;
+            font-size: 6vmin;
+            padding-top: 0.25vmin;
+            padding-bottom: 0.25vmin;
+            font-family: 'Trebuchet MS';
+            text-align: center;
         }
 
         .score {
-            background-color: pink;
+            background-color: #E9FFED;
             width: 30vmin;
-            height: 5vmin;
+            height: 4vmin;
+            border-style: solid solid solid solid;
+            border-color: #E9FFED;
+            font-size: 4vmin;
+            padding-bottom: 0.5vmin;
+            font-family: 'Trebuchet MS';
+            text-align: center;
         }
         
         .level {
-            background-color: purple;
+            background-color: #7FB28A;
             width: 30vmin;
-            height: 5vmin;
+            height: 4vmin;
+            border-style: none solid solid solid;
+            border-color: #7FB28A;
+            font-size: 4vmin;
+            padding-bottom: 0.5vmin;
+            font-family: 'Trebuchet MS';
+            text-align: center;
         }
 
         .loading-block {
-            background: green;
+            background: black;
             width: 30vmin;
             height: 12vmin;
         }
 
         .hold-block {
-            background-color: white;
+            background-color: black;
             width: 18vmin;
             height: 12vmin;
             display: grid;
             grid-template-rows: repeat(4, 1fr);
             grid-template-columns: repeat(4, 1fr);
+            border-style: solid none solid solid;
+            border-color: white;
         }
 
 		.game-board {
-			background-color: goldenrod;
+			background-color: black;
 			width: 30vmin;
 			height: 60vmin;
 			display: grid;
 			grid-template-rows: repeat(20, 1fr);
 			grid-template-columns: repeat(10, 1fr);
+            border-style: solid;
+            border-color: white;
 		}
 
         .coming-blocks {
-            background-color: #767676;
+            background-color: black;
             width: 18vmin;
             height: 48vmin;
+            border-style: solid solid solid none;
+            border-color: white;
         }
 
 	</style>
