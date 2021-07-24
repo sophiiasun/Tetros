@@ -11,57 +11,77 @@
 			width: 100vw;
 			display: flex;
 			justify-content: center;
-			align-items: flex-start;
+			align-items: center;
 			margin: 0;
 			background-color: black; 
 		}
 
-        #hold-block {
-            background-color: #767676;
-            width: 24vmin;
-            height: 16vmin;
+        #template {
+            background-color: blue;
+            width: 66vmin;
+            height: 90vmin;
+            display: grid;
+            grid-template-rows: repeat(5, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .title {
+            background-color: aquamarine;
+            width: 66vmin;
+            height: 8vmin;
+            grid-column: 1/4;
+        }
+
+        .score {
+            background-color: pink;
+            width: 30vmin;
+            height: 5vmin;
+        }
+        
+        .level {
+            background-color: purple;
+            width: 30vmin;
+            height: 5vmin;
+        }
+
+        .loading-block {
+            background: green;
+            width: 30vmin;
+            height: 12vmin;
+        }
+
+        .hold-block {
+            background-color: white;
+            width: 18vmin;
+            height: 12vmin;
             display: grid;
             grid-template-rows: repeat(4, 1fr);
             grid-template-columns: repeat(4, 1fr);
         }
 
-		#game-board {
-			background-color: #767676;
-			width: 40vmin;
-			height: 96vmin;
+		.game-board {
+			background-color: goldenrod;
+			width: 30vmin;
+			height: 60vmin;
 			display: grid;
 			grid-template-rows: repeat(20, 1fr);
 			grid-template-columns: repeat(10, 1fr);
 		}
 
-        #coming-blocks {
+        .coming-blocks {
             background-color: #767676;
-            width: 24vmin;
-            height: 64vmin;
+            width: 18vmin;
+            height: 48vmin;
         }
-
-		.tile {
-			background-color: #bfbebe;
-			font-size: 2vmin;
-			font-family: arial;
-			text-align: center;
-			padding-top: 0.5vmin;
-		}
-
-		.grid-container > div {
-			text-align: center;
-			background-color: #CCC;
-		}
 
 	</style>
 </head>
 <body>
 	<p>
-    <div id="hold-block"></div>
-	<div id="game-board"></div>
-    <div id="coming-blocks"></div>
+    <div id="template"></div>
 	</p>
 </body>
-<script src="script.js"></script>
+<script src="game.js"></script>
 <script src="blocks.js"></script>
+<script src="script.js"></script>
 </html>
