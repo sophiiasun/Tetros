@@ -67,6 +67,16 @@ class Tetromino {
             this.cArray[i] *= -1; this.rArray[i] *= -1
         }
     }
+    
+    hTranslate(direction) {
+        // if direction is 0 move left and
+        if(direction == 0) {
+            if(this.x>0) this.x -=1;
+        }
+        else {
+            if(this.x < 10) this.x += 1; 
+        }
+    }
 
 }
 

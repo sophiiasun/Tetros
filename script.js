@@ -36,7 +36,7 @@ function naturalDrop(currentTime) {
 }
 
 function updateDrop() {
-
+    
 }
 
 window.requestAnimationFrame(naturalDrop)
