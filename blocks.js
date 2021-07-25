@@ -79,9 +79,9 @@ function shuffle(array) {
         [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
     return array;
-  }
+}
 
-  function blockGenerator(){
+function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
         arr[i] = new Tetromino(0, 0, i, 0); 
@@ -106,6 +106,7 @@ function spawnBlock() {
     tetr.rArray.forEach(col => {
         tetr.cArray.forEach(row => {
             const blockElement = document.createElement("div")
+            blockElement.id = "SELECTED-BLOCK"
             blockElement.classList.add("block-i")
             blockElement.style.gridRowStart = tetr.r + row
             blockElement.style.gridColumnStart = tetr.c + col
