@@ -79,23 +79,20 @@ class Tetromino {
                 return
             }  
         }
-        removeTetr()
-        spawnTetr()
+        this.respawnTetr()
     }
     rotateCounterClockwise() {
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
             this.cArray[i] *= -1
         }
-        removeTetr()
-        spawnTetr()
+        this.respawnTetr()
     }
     flip() {
         for (var i = 0; i < 4; i++) {
             this.cArray[i] *= -1; this.rArray[i] *= -1
         }
-        removeTetr()
-        spawnTetr()
+        this.respawnTetr()
     }
     getBot() {
         var top = 0; 
@@ -126,8 +123,7 @@ class Tetromino {
         else {
             if(this.getRight() < 10) this.c += 1; 
         }
-        removeTetr()
-        spawnTetr()
+        this.respawnTetr()
     }
     checkOccupied(row, column, rot) {
         // check if current block translated to row, column is occupied
@@ -138,6 +134,10 @@ class Tetromino {
             if(OCCUPIED[tmpRow][tmpColumn] == true || tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10) return true
         }
         return false
+    }
+    respawnTetr() {
+        removeTetr()
+        spawnTetr()
     }
 }
 
@@ -176,7 +176,8 @@ function removeTetr() {
 
 // i j l o s t z 
 blockGenerator(); 
-CURRENT_TETR = comingBlocksQueue.shift(); 
+let CURRENT_TETR = comingBlocksQueue.shift(); 
+let HELD_TETR
 
 function spawnTetr() {
     for(var i = 0; i < 4; i++){
@@ -189,7 +190,7 @@ function spawnTetr() {
     }
 }
 
-COMING_BLOCKS = []
+let COMING_BLOCKS = []
 
 function clearComingBlocks() {
     COMING_BLOCKS.forEach(blockElement => {
@@ -214,15 +215,53 @@ function displayComingBlocks() {
     }
 }
 
-function testDisplay() {
-    clearComingBlocks()
-    var tetr = new Tetromino(0, 0, 0)
-    for(var i = 0; i < 4; i++){
-        const blockElement = document.createElement("div")
-        blockElement.classList.add(CURRENT_TETR.name)
-        blockElement.style.gridRowStart = 3 + CURRENT_TETR.rArray[i]; 
-        blockElement.style.gridColumnStart = 3 + CURRENT_TETR.cArray[i]; 
-        COMINGBLOCKS.appendChild(blockElement)
-        COMING_BLOCKS.push(blockElement)
+let HOLD_BLOCKS = []
+
+function holdBlock() {
+    if (HOLD_BLOCKS.length != 0) { // smth is already held (swap two tetr)
+        swapTetr()
+    } else { // nothing is currently held, hold current block
+        holdTetr()
     }
+}
+
+function holdTetr() {
+    HELD_TETR = CURRENT_TETR
+    CURRENT_TETR = comingBlocksQueue.shift()
+    removeTetr()
+    displayHoldBlock()
+    spawnTetr()
+}
+
+function swapTetr() {
+    tmp = CURRENT_TETR
+    CURRENT_TETR = HELD_TETR
+    HELD_TETR = tmp
+    CURRENT_TETR.r = HELD_TETR.r
+    CURRENT_TETR.c = HELD_TETR.c
+    removeTetr()
+    displayHoldBlock()
+    spawnTetr()
+}
+
+function displayHoldBlock() {
+    clearHoldBlock()
+    for (var i = 0; i < 4; i++) {
+        let blockElement = document.createElement("div")
+        blockElement.classList.add(HELD_TETR.name)
+        blockElement.style.gridRowStart = 2 + HELD_TETR.rArray[i]
+        if (HELD_TETR.type == 3) blockElement.style.gridColumnStart = 5 + HELD_TETR.cArray[i]
+        else if (HELD_TETR.type == 0) blockElement.style.gridColumnStart = 3 + HELD_TETR.cArray[i]
+        else blockElement.style.gridColumnStart = 4 + HELD_TETR.cArray[i]
+        HOLDBLOCK.appendChild(blockElement)
+        HOLD_BLOCKS.push(blockElement)
+    }
+}
+
+function clearHoldBlock() {
+    if (HOLD_BLOCKS.length == 0) return
+    HOLD_BLOCKS.forEach(blockElement => {
+        HOLDBLOCK.removeChild(blockElement)
+    })
+    HOLD_BLOCKS = []
 }

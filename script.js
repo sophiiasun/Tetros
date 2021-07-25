@@ -11,15 +11,20 @@ let lastRenderTime = 0
 document.onkeydown = function(e) {
     switch(e.which) {
         case 37: // left
-            CURRENT_TETR.hTranslate(0); 
+            CURRENT_TETR.hTranslate(0)
             break
         case 38: // up
-            CURRENT_TETR.wallKickRotateClockwise(); 
+            CURRENT_TETR.wallKickRotateClockwise()
             break
         case 39: // right
-            CURRENT_TETR.hTranslate(1); 
+            CURRENT_TETR.hTranslate(1)
             break 
         case 40: // down
+            break
+        case 67: // letter c
+            // alert("pressed c")
+            holdBlock()
+            break
     }
 }
 
