@@ -39,6 +39,7 @@ class Tetromino {
         this.r = r, this.c = c
         this.type = type
         this.cArray = [4]; this.rArray = [4]
+        this.name = ""
         // array is processed in clockwise order 
         if (this.type == 0) { // i piece centred at 3rd bottom block
             this.cArray = [2, 1, 0, -1]; this.rArray = [0, 0, 0, 0]; this.name = "block-i"
@@ -154,18 +155,10 @@ function blockGenerator(){
     return arr; 
 }
 
-function testSpawn() {
-    const GAMEBOARD = document.getElementById("GAMEBOARD")
-    const blockElement = document.createElement("div")
-    blockElement.classList.add("block-i")
-    blockElement.style.gridRowStart = 5
-    blockElement.style.gridColumnStart = 5
-    GAMEBOARD.appendChild(blockElement)
-}
-
 CURRENT_BLOCKS = []
 
 function removeTetr() {
+    if (CURRENT_BLOCKS.length == 0) return
     CURRENT_BLOCKS.forEach(blockElement => {
         GAMEBOARD.removeChild(blockElement)
     })
@@ -177,7 +170,6 @@ blockGenerator();
 CURRENT_TETR = new Tetromino(15, 5, 5); 
 
 function spawnTetr() {
-    const GAMEBOARD = document.getElementById("GAMEBOARD")
     for(var i = 0; i < 4; i++){
         const blockElement = document.createElement("div")
         blockElement.classList.add(CURRENT_TETR.name)
@@ -190,17 +182,38 @@ function spawnTetr() {
 
 COMING_BLOCKS = []
 
+function clearComingBlocks() {
+    COMING_BLOCKS.forEach(blockElement => {
+        COMINGBLOCKS.removeChild(blockElement)
+    })
+    COMING_BLOCKS = []
+}
+
 function displayComingBlocks() {
-    const COMINGBLOCKS = document.getElementById("COMING-BLOCKS")
-    for (var i = 0; i < 5; i++) {
+    clearComingBlocks()
+    for (var i = 1; i <= 5; i++) {
         var tetr = comingBlocksQueue[i]
-        for (var j = 1; j <= 4; j++) {
-            const blockElement = document.createElement("div")
+        for (var j = 0; j < 4; j++) {
+            let blockElement = document.createElement("div")
             blockElement.classList.add(tetr.name)
-            blockElement.style.gridRowStart = j * 3 - 1 + tetr.rArray[i]
-            blockElement.style.gridColStart = 2 + tetr.cArray[i]
+            blockElement.style.gridRowStart = i * 3 - 1 + tetr.rArray[j]
+            if (tetr.type == 3) blockElement.style.gridColumnStart = 4 + tetr.cArray[j]
+            else blockElement.style.gridColumnStart = 3 + tetr.cArray[j]
             COMINGBLOCKS.appendChild(blockElement)
             COMING_BLOCKS.push(blockElement)
         }
+    }
+}
+
+function testDisplay() {
+    clearComingBlocks()
+    var tetr = new Tetromino(0, 0, 0)
+    for(var i = 0; i < 4; i++){
+        const blockElement = document.createElement("div")
+        blockElement.classList.add(CURRENT_TETR.name)
+        blockElement.style.gridRowStart = 3 + CURRENT_TETR.rArray[i]; 
+        blockElement.style.gridColumnStart = 3 + CURRENT_TETR.cArray[i]; 
+        COMINGBLOCKS.appendChild(blockElement)
+        COMING_BLOCKS.push(blockElement)
     }
 }

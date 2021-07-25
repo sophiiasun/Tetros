@@ -1,7 +1,7 @@
 // TEMPLATE PLANNING:
 // each block (for tetronimo) is 3vmin
-
 const TEMPLATE = document.getElementById("template")
+let GAMEBOARD, COMINGBLOCKS, HOLDBLOCK 
 
 var data = []
 var DROP_SPEED = 1
@@ -26,10 +26,15 @@ document.onkeydown = function(e) {
 main()
 function main () {
     createBoard()
+    GAMEBOARD = document.getElementById("GAMEBOARD")
+    COMINGBLOCKS = document.getElementById("COMING-BLOCKS")
+    HOLDBLOCK = document.getElementById("HOLD-BLOCK")
     spawnTetr()
-    SELECTED_BLOCK = document.getElementById("SELECTED-BLOCK")
     naturalDrop()
+    
 }
+
+
 
 function naturalDrop(currentTime) {
     window.requestAnimationFrame(naturalDrop)
@@ -39,15 +44,17 @@ function naturalDrop(currentTime) {
     
     if(CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c) == false) { 
         CURRENT_TETR.r++
-        removeTetr()
+        removeTetr(CURRENT_BLOCKS, GAMEBOARD)
     } else {
         for(var i = 0; i < 4; i++){
             OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
         }
-        if (comingBlocksQueue.length <= 0) blockGenerator()
+        if (comingBlocksQueue.length < 7) blockGenerator()
         CURRENT_TETR = comingBlocksQueue.shift()
         CURRENT_BLOCKS = []
+        displayComingBlocks()
     }
+    // testDisplay()
     spawnTetr()
 }
 
