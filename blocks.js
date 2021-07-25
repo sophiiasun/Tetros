@@ -9,7 +9,7 @@
 // wallkicks https://tetris.fandom.com/wiki/SRS
 var wallKickx = [8], wallKicky = [8], gravity = 10, comingBlocksQueue = []; 
 //queue.shift pops the front 
-var OCCUPIED = [10][20]; 
+var OCCUPIED = [21][11]; 
 
 initWallkicks()
 // initializing the wallkicks
@@ -168,4 +168,8 @@ function spawnTetr() {
         GAMEBOARD.appendChild(blockElement)
         CURRENT_BLOCKS.push(blockElement)
     }
+}
+
+function getHoverBlock() {
+
 }
