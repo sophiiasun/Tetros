@@ -38,6 +38,7 @@ class Tetromino {
     constructor(r, c, type) {
         this.r = r, this.c = c
         this.type = type
+        this.rot = 0
         this.cArray = [4]; this.rArray = [4]
         this.name = ""
         // array is processed in clockwise order 
@@ -57,10 +58,26 @@ class Tetromino {
             this.cArray = [-1, 0, 0, 1]; this.rArray = [1, 1, 0, 0]; this.name = "block-z"
         }
     }
-    rotateClockwise() {
+    rotateClockwise(){
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
             this.rArray[i] *= -1
+        }
+        this.rot = (this.rot+1)%4
+    }
+    wallKickRotateClockwise() {
+        // checking the wallkicks and
+        for(var kick = 0; kick < 5; kick++){
+            var newR = this.r + wallKickx[2*this.rot][kick], newC = this.c + wallKicky[2*this.rot][kick] 
+            if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
+                for (var i = 0; i < 4; i++) {
+                    var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
+                    this.rArray[i] *= -1
+                }
+                this.rot = (this.rot+1)%4, this.r = newR, this.c = newC 
+                console.log(kick); 
+                return
+            }  
         }
         removeTetr()
         spawnTetr()
@@ -112,23 +129,15 @@ class Tetromino {
         removeTetr()
         spawnTetr()
     }
-    checkOccupied(row, column) {
+    checkOccupied(row, column, rot) {
         // check if current block translated to row, column is occupied
+        var copy = new Tetromino(row, column, this.type, 0); 
+        while(copy.rot != rot) copy.rotateClockwise(); 
         for(var i = 0; i < 4; i++) {
-            var tmpRow = this.rArray[i] + row, tmpColumn = this.cArray[i] + column; 
-            if(OCCUPIED[tmpRow][tmpColumn] == true || tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10) return true;  
+            var tmpRow = copy.rArray[i] + copy.r, tmpColumn = copy.cArray[i] + copy.c; 
+            if(OCCUPIED[tmpRow][tmpColumn] == true || tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10) return true
         }
-        return false; 
-    }
-
-    checkRotate(){
-        var tmpRowArray = [4], tmpColumnArray = [4]; 
-        for(var i = 0; i < 4; i++) {
-            tmpRowArray[i] = -1 * this.cArray[i]; tmpColumnArray[i] = this.rArray; 
-            var tmpRow = tmpRowArray[i] + this.r, tmpColumn = tmpColumnArray[i] + this.c;  
-            if(OCCUPIED[tmpRow][tmpColumn]) return false; 
-        }
-        return true; 
+        return false
     }
 }
 
@@ -146,7 +155,7 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(0, 5, i); 
+        arr[i] = new Tetromino(0, 5, i, 0); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){

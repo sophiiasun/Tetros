@@ -14,7 +14,7 @@ document.onkeydown = function(e) {
             CURRENT_TETR.hTranslate(0); 
             break
         case 38: // up
-            CURRENT_TETR.rotateClockwise(); 
+            CURRENT_TETR.wallKickRotateClockwise(); 
             break
         case 39: // right
             CURRENT_TETR.hTranslate(1); 
@@ -44,7 +44,7 @@ function naturalDrop(currentTime) {
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
     
-    if(CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c) == false) { 
+    if(CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c, CURRENT_TETR.rot) == false) { 
         CURRENT_TETR.r++
         removeTetr(CURRENT_BLOCKS, GAMEBOARD)
     } else {
