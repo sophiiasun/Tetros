@@ -71,7 +71,7 @@ class Tetromino {
     rotateClockwise(){
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
-            this.rArray[i] *= -1
+            this.cArray[i] *= -1
         }
         this.rot = (this.rot+1)%4
     }
@@ -84,7 +84,7 @@ class Tetromino {
             if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
                 for (var i = 0; i < 4; i++) {
                     var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
-                    this.rArray[i] *= -1
+                    this.cArray[i] *= -1
                 }
                 this.rot = (this.rot+1)%4, this.r = newR, this.c = newC 
                 this.respawnBlock() 
@@ -93,10 +93,27 @@ class Tetromino {
         }
         
     }
+    wallKickRotateCounterClockwise(){
+        if(this.type != 3){
+            for(var kick = 0; kick < 5; kick++){
+                var newR = this.r + wallKickx[(2*this.rot+7)%8][kick], newC = this.c + wallKicky[(2*this.rot+7)%8][kick] 
+                if(this.checkOccupied(newR, newC, (this.rot+3)%4) == false) {
+                    for (var i = 0; i < 4; i++) {
+                        var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
+                        this.rArray[i] *= -1
+                    }
+                    this.rot = (this.rot+3)%4, this.r = newR, this.c = newC
+                    removeTetr()
+                    spawnTetr()
+                    return 
+                }
+            }
+        }
+    }
     rotateCounterClockwise() {
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
-            this.cArray[i] *= -1
+            this.rArray[i] *= -1
         }
         this.respawnBlock()
     }

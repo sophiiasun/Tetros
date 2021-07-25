@@ -20,7 +20,10 @@ document.onkeydown = function(e) {
             break
         case 39: // right
             CURRENT_TETR.hTranslate(1)
-            break 
+            break
+        case 90 : // z jey
+            CURRENT_TETR.wallKickRotateCounterClockwise() 
+            break  
         case 40: // down
             break
         case 67: // letter c
