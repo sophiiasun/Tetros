@@ -7,7 +7,6 @@ var data = []
 var DROP_SPEED = 1
 
 let lastRenderTime = 0
-let SELECTED_BLOCK
 
 document.onkeydown = function(e) {
     switch(e.which) {
@@ -21,7 +20,7 @@ document.onkeydown = function(e) {
 main()
 function main () {
     createBoard()
-    spawnBlock()
+    spawnTetr()
     SELECTED_BLOCK = document.getElementById("SELECTED-BLOCK")
     naturalDrop()
 }
@@ -31,8 +30,10 @@ function naturalDrop(currentTime) {
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
-    let row = SELECTED_BLOCK.style.gridRowStart
-    SELECTED_BLOCK.style.gridRowStart = row + 1
+    removeTetr()
+    CURRENT_TETR.r++
+    // alert(CURRENT_TETR.r + " " + CURRENT_TETR.c)
+    spawnTetr()
 }
 
 function updateDrop() {

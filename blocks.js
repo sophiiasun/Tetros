@@ -112,18 +112,26 @@ function testSpawn() {
     GAMEBOARD.appendChild(blockElement)
 }
 
+CURRENT_TETR = new Tetromino(1, 5, 0, 0)
+CURRENT_BLOCKS = []
 
-function spawnBlock() {
+function removeTetr() {
+    CURRENT_BLOCKS.forEach(blockElement => {
+        GAMEBOARD.removeChild(blockElement)
+    })
+    CURRENT_BLOCKS = []
+}
+
+function spawnTetr() {
     const GAMEBOARD = document.getElementById("GAMEBOARD")
-    tetr = new Tetromino(1, 5, 0, 0)
-    tetr.rArray.forEach(col => {
-        tetr.cArray.forEach(row => {
+    CURRENT_TETR.rArray.forEach(col => {
+        CURRENT_TETR.cArray.forEach(row => {
             const blockElement = document.createElement("div")
-            blockElement.id = "SELECTED-BLOCK"
             blockElement.classList.add("block-i")
-            blockElement.style.gridRowStart = tetr.r + row
-            blockElement.style.gridColumnStart = tetr.c + col
+            blockElement.style.gridRowStart = CURRENT_TETR.r + row
+            blockElement.style.gridColumnStart = CURRENT_TETR.c + col
             GAMEBOARD.appendChild(blockElement)
+            CURRENT_BLOCKS.push(blockElement)
         })
     })
 }
