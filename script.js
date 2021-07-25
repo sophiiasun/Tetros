@@ -2,9 +2,8 @@
 // each block (for tetronimo) is 3vmin
 const TEMPLATE = document.getElementById("template")
 let GAMEBOARD, COMINGBLOCKS, HOLDBLOCK 
-
 var data = []
-var DROP_SPEED = 1
+var DROP_SPEED = 1, NATURAL_DROP_SPEED = 1
 
 let lastRenderTime = 0
 let dropTime = 0
@@ -25,13 +24,22 @@ document.onkeydown = function(e) {
             CURRENT_TETR.wallKickRotateCounterClockwise() 
             break  
         case 40: // down
+            DROP_SPEED = NATURAL_DROP_SPEED * 6
             break
         case 67: // letter c
             // alert("pressed c")
             holdBlock()
             break
     }
-    hasBlockMoved = true
+    // hasBlockMoved = true
+}
+
+document.onkeyup = function (e) {
+    switch(e.which) {
+        case 40 : // down
+            DROP_SPEED = NATURAL_DROP_SPEED 
+            break
+    }
 }
 
 main()
@@ -56,7 +64,7 @@ function naturalDrop(currentTime) {
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 100
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
-    
+
     if (CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c, CURRENT_TETR.rot) == false) { 
         CURRENT_TETR.r++
         removeTetr()
@@ -64,7 +72,7 @@ function naturalDrop(currentTime) {
         hasBlockMoved = true
     } else { // is occupied
         if (hasBlockMoved == true) dropTime = currentTime
-        if ((currentTime - dropTime)/1000 >= 1.5) {
+        if ((currentTime - dropTime)/1000 >= 1) {
             for(var i = 0; i < 4; i++){
                 OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
             }

@@ -17,7 +17,7 @@ blockColoursMap.set("block-j", "#3A587A")
 blockColoursMap.set("block-t", "#CC99C9")
 
 // wallkicks https://tetris.fandom.com/wiki/SRS
-var wallKickx = [8], wallKicky = [8], gravity = 10, comingBlocksQueue = []; 
+var wallKickx = [8], wallKicky = [8], comingBlocksQueue = []; 
 //queue.shift pops the front 
 var OCCUPIED = [25][15]; 
 
@@ -51,6 +51,7 @@ class Tetromino {
         this.rot = 0
         this.cArray = [4]; this.rArray = [4]
         this.name = ""
+        this.translateVal = 0 
         // array is processed in clockwise order 
         if (this.type == 0) { // i piece centred at 3rd bottom block
             this.cArray = [2, 1, 0, -1]; this.rArray = [0, 0, 0, 0]; this.name = "block-i"
@@ -114,12 +115,6 @@ class Tetromino {
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
             this.rArray[i] *= -1
-        }
-        this.respawnBlock()
-    }
-    flip() {
-        for (var i = 0; i < 4; i++) {
-            this.cArray[i] *= -1; this.rArray[i] *= -1
         }
         this.respawnBlock()
     }
