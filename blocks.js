@@ -167,7 +167,7 @@ function removeTetr() {
 
 // i j l o s t z 
 blockGenerator(); 
-CURRENT_TETR = new Tetromino(15, 5, 5); 
+CURRENT_TETR = comingBlocksQueue.shift(); 
 
 function spawnTetr() {
     for(var i = 0; i < 4; i++){
