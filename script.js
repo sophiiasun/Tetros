@@ -29,7 +29,7 @@ document.onkeydown = function(e) {
             CURRENT_TETR.wallKickRotateCounterClockwise() 
             break  
         case 40: // down
-            DROP_SPEED = NATURAL_DROP_SPEED * 6
+            DROP_SPEED = NATURAL_DROP_SPEED * 30
             break
         case 67: // letter c
             // alert("pressed c")
