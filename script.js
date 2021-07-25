@@ -11,6 +11,10 @@ let hasBlockMoved = true
 
 document.onkeydown = function(e) {
     switch(e.which) {
+        case 32: // space
+            // alert("hard drop")
+            hardDrop()
+            break
         case 37: // left
             CURRENT_TETR.hTranslate(0)
             break
@@ -61,7 +65,7 @@ function getCurrentTime(currentTime) {
 
 function naturalDrop(currentTime) {
     window.requestAnimationFrame(naturalDrop)
-    const secondsSinceLastRender = (currentTime - lastRenderTime) / 100
+    const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
 

@@ -312,3 +312,21 @@ function dropBlockEffect() {
         // block.style.borderColor = blockColoursMap.get(CURRENT_TETR.name)
     })
 }
+
+function hardDrop() {
+    removeTetr()
+    for (var i = 20; i >= 2; i--) {
+        if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) {
+            CURRENT_TETR.r = i; 
+            for(var i = 0; i < 4; i++){
+                OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
+            }
+            break
+        }
+    }
+    spawnTetr()
+    dropBlockEffect()
+    CURRENT_TETR = comingBlocksQueue.shift()
+    CURRENT_BLOCKS = []
+    spawnTetr()
+}
