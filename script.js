@@ -52,7 +52,7 @@ function main () {
     GAMEBOARD = document.getElementById("GAMEBOARD")
     COMINGBLOCKS = document.getElementById("COMING-BLOCKS")
     HOLDBLOCK = document.getElementById("HOLD-BLOCK")
-    blockGenerator()
+    blockGenerator(); blockGenerator(); blockGenerator()
     spawnTetr()
     displayComingBlocks()
     naturalDrop()
@@ -69,6 +69,7 @@ function naturalDrop(currentTime) {
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
 
+    if (comingBlocksQueue.length < 20) blockGenerator()
     if (CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c, CURRENT_TETR.rot) == false) { 
         CURRENT_TETR.r++
         removeTetr()
@@ -85,7 +86,7 @@ function naturalDrop(currentTime) {
             CURRENT_BLOCKS = []
             spawnTetr()
         }
-        if (comingBlocksQueue.length < 7) blockGenerator()
+        
         displayComingBlocks()
         hasBlockMoved = false
     }
