@@ -12,10 +12,13 @@ document.onkeydown = function(e) {
     switch(e.which) {
         case 37: // left
             CURRENT_TETR.hTranslate(0); 
+            break
         case 38: // up
             CURRENT_TETR.rotateClockwise(); 
+            break
         case 39: // right
             CURRENT_TETR.hTranslate(1); 
+            break 
         case 40: // down
     }
 }
@@ -34,7 +37,11 @@ function naturalDrop(currentTime) {
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
     removeTetr()
-    CURRENT_TETR.r++
+    if(CURRENT_TETR.getBot() < 20) CURRENT_TETR.r++
+    else{
+        if(queue.length > 0) CURRENT_TETR = queue.shift()
+        else blockGenerator() 
+    }
     spawnTetr()
 }
 

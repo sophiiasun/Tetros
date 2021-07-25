@@ -28,26 +28,25 @@ function initWallkicks() {
 }
 
 class Tetromino {
-    constructor(r, c, type, rot) {
+    constructor(r, c, type) {
         this.r = r, this.c = c
         this.type = type
-        this.rot = rot
         this.cArray = [4]; this.rArray = [4]
         // array is processed in clockwise order 
         if (this.type == 0) { // i piece centred at 3rd bottom block
-            this.cArray = [0, 0, 0, 0]; this.rArray = [2, 1, 0, -1]
+            this.cArray = [0, 0, 0, 0]; this.rArray = [2, 1, 0, -1]; this.name = "block-i"
         } else if (this.type == 1) { // j piece
-            this.cArray = [-1, -1, 0, 1]; this.rArray = [1, 0, 0, 0]
+            this.cArray = [-1, -1, 0, 1]; this.rArray = [1, 0, 0, 0]; this.name = "block-j"
         } else if (this.type == 2) { // l piece  
-            this.cArray = [-1, 0, 1, 1]; this.rArray = [0, 0, 0, 1]
+            this.cArray = [-1, 0, 1, 1]; this.rArray = [0, 0, 0, 1]; this.name = "block-l"
         } else if (this.type == 3) { // o piece (bottom right is centre) 
-            this.cArray = [-1, -1, 0, 0]; this.rArray = [1, 0, 0, 1]
+            this.cArray = [-1, -1, 0, 0]; this.rArray = [1, 0, 0, 1]; this.name = "block-o"
         } else if (this.type == 4) { // s piece 
-            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 1]
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 1]; this.name = "block-s"
         } else if (this.type == 5) { // t piece
-            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 0]
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 0]; this.name = "block-t"
         } else { // z piece 
-            this.cArray = [-1, 0, 0, 1]; this.rArray = [1, 1, 0, 0]
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [1, 1, 0, 0]; this.name = "block-z"
         }
     }
     rotateClockwise() {
@@ -63,21 +62,51 @@ class Tetromino {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
             this.cArray[i] *= -1
         }
+        removeTetr()
+        spawnTetr()
     }
     flip() {
         for (var i = 0; i < 4; i++) {
             this.cArray[i] *= -1; this.rArray[i] *= -1
         }
+        removeTetr()
+        spawnTetr()
     }
-    
+
+    getBot(){
+        var top = 0; 
+        for(var i = 0; i < 4; i++){
+            top = Math.max(top, this.rArray[i] + this.r); 
+        }
+        return top; 
+    }
+
+    getLeft(){
+        var lft = 10; 
+        for(var i = 0; i < 4; i++){
+            lft = Math.min(lft, this.cArray[i] + this.c); 
+        }
+        return lft; 
+    }
+
+    getRight(){
+        var rt = 0; 
+        for(var i = 0; i < 4; i++){
+            rt = Math.max(rt, this.cArray[i] + this.c); 
+        }
+        return rt; 
+    }
+
     hTranslate(direction) {
-        // if direction is 0 move left and
+        // if direction is 0 move left and 1 is move right 
         if(direction == 0) {
-            if(this.x>0) this.x -=1;
+            if(this.getLeft() > 1) this.c -= 1; ; 
         }
         else {
-            if(this.x < 10) this.x += 1; 
+            if(this.getRight() < 10) this.c += 1; 
         }
+        removeTetr()
+        spawnTetr()
     }
 
 }
@@ -114,7 +143,6 @@ function testSpawn() {
     GAMEBOARD.appendChild(blockElement)
 }
 
-CURRENT_TETR = new Tetromino(1, 5, 0, 0)
 CURRENT_BLOCKS = []
 
 function removeTetr() {
@@ -124,16 +152,19 @@ function removeTetr() {
     CURRENT_BLOCKS = []
 }
 
+// i j l o s t z 
+blockGenerator(); 
+CURRENT_TETR = queue.shift(); 
+
+
 function spawnTetr() {
     const GAMEBOARD = document.getElementById("GAMEBOARD")
-    CURRENT_TETR.rArray.forEach(col => {
-        CURRENT_TETR.cArray.forEach(row => {
-            const blockElement = document.createElement("div")
-            blockElement.classList.add("block-i")
-            blockElement.style.gridRowStart = CURRENT_TETR.r + row
-            blockElement.style.gridColumnStart = CURRENT_TETR.c + col
-            GAMEBOARD.appendChild(blockElement)
-            CURRENT_BLOCKS.push(blockElement)
-        })
-    })
+    for(var i = 0; i < 4; i++){
+        const blockElement = document.createElement("div")
+        blockElement.classList.add(CURRENT_TETR.name)
+        blockElement.style.gridRowStart = CURRENT_TETR.r + CURRENT_TETR.rArray[i]; 
+        blockElement.style.gridColumnStart = CURRENT_TETR.c + CURRENT_TETR.cArray[i]; 
+        GAMEBOARD.appendChild(blockElement)
+        CURRENT_BLOCKS.push(blockElement)
+    }
 }
