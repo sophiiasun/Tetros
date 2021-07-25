@@ -55,6 +55,8 @@ class Tetromino {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
             this.rArray[i] *= -1
         }
+        removeTetr()
+        spawnTetr()
     }
     rotateCounterClockwise() {
         for (var i = 0; i < 4; i++) {
