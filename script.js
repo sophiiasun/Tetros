@@ -7,6 +7,7 @@ var data = []
 var DROP_SPEED = 1
 
 let lastRenderTime = 0
+let dropTime = 0
 
 document.onkeydown = function(e) {
     switch(e.which) {
@@ -49,10 +50,10 @@ function naturalDrop(currentTime) {
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
     
-    if(CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c, CURRENT_TETR.rot) == false) { 
+    if (CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c, CURRENT_TETR.rot) == false) { 
         CURRENT_TETR.r++
         removeTetr(CURRENT_BLOCKS, GAMEBOARD)
-    } else {
+    } else { // is occupied
         for(var i = 0; i < 4; i++){
             OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
         }
@@ -63,6 +64,7 @@ function naturalDrop(currentTime) {
     }
     // testDisplay()
     spawnTetr()
+    dropTime = currentTime
 }
 
 function permaDrop() {

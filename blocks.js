@@ -227,8 +227,8 @@ function swapTetr() {
     tmp = CURRENT_TETR
     CURRENT_TETR = HELD_TETR
     HELD_TETR = tmp
-    CURRENT_TETR.r = HELD_TETR.r
-    CURRENT_TETR.c = HELD_TETR.c
+    CURRENT_TETR.r = 2
+    CURRENT_TETR.c = 5
     removeTetr()
     displayHoldBlock()
     spawnTetr()
@@ -239,7 +239,7 @@ function displayHoldBlock() {
     for (var i = 0; i < 4; i++) {
         let blockElement = document.createElement("div")
         blockElement.classList.add(HELD_TETR.name)
-        blockElement.style.gridRowStart = 2 + HELD_TETR.rArray[i]
+        blockElement.style.gridRowStart = 3 + HELD_TETR.rArray[i]
         if (HELD_TETR.type == 3) blockElement.style.gridColumnStart = 5 + HELD_TETR.cArray[i]
         else if (HELD_TETR.type == 0) blockElement.style.gridColumnStart = 3 + HELD_TETR.cArray[i]
         else blockElement.style.gridColumnStart = 4 + HELD_TETR.cArray[i]
