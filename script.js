@@ -11,8 +11,11 @@ let lastRenderTime = 0
 document.onkeydown = function(e) {
     switch(e.which) {
         case 37: // left
+            CURRENT_TETR.hTranslate(0); 
         case 38: // up
+            CURRENT_TETR.rotateClockwise(); 
         case 39: // right
+            CURRENT_TETR.hTranslate(1); 
         case 40: // down
     }
 }
