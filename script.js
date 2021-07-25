@@ -29,7 +29,9 @@ function main () {
     GAMEBOARD = document.getElementById("GAMEBOARD")
     COMINGBLOCKS = document.getElementById("COMING-BLOCKS")
     HOLDBLOCK = document.getElementById("HOLD-BLOCK")
+    blockGenerator()
     spawnTetr()
+    displayComingBlocks()
     naturalDrop()
     
 }

@@ -192,7 +192,7 @@ function clearComingBlocks() {
 function displayComingBlocks() {
     clearComingBlocks()
     for (var i = 1; i <= 5; i++) {
-        var tetr = comingBlocksQueue[i]
+        var tetr = comingBlocksQueue[i-1]
         for (var j = 0; j < 4; j++) {
             let blockElement = document.createElement("div")
             blockElement.classList.add(tetr.name)
