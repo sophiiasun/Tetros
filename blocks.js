@@ -9,6 +9,8 @@
 // wallkicks https://tetris.fandom.com/wiki/SRS
 var wallKickx = [8], wallKicky = [8], gravity = 10, comingBlocksQueue = []; 
 //queue.shift pops the front 
+var OCCUPIED = [10][20]; 
+
 initWallkicks()
 // initializing the wallkicks
 function initWallkicks() {
