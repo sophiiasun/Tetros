@@ -32,7 +32,6 @@ function naturalDrop(currentTime) {
     lastRenderTime = currentTime
     removeTetr()
     CURRENT_TETR.r++
-    // alert(CURRENT_TETR.r + " " + CURRENT_TETR.c)
     spawnTetr()
 }
 
