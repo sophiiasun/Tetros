@@ -329,4 +329,5 @@ function hardDrop() {
     CURRENT_TETR = comingBlocksQueue.shift()
     CURRENT_BLOCKS = []
     spawnTetr()
+    displayComingBlocks()
 }
