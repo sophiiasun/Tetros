@@ -17,7 +17,7 @@ blockColoursMap.set("block-j", "#3A587A")
 blockColoursMap.set("block-t", "#CC99C9")
 
 // wallkicks https://tetris.fandom.com/wiki/SRS
-var wallKickx = [8], wallKicky = [8], comingBlocksQueue = []; 
+var wallKickr = [8], wallKickc = [8], comingBlocksQueue = []; 
 //queue.shift pops the front 
 var OCCUPIED = [25][15]; 
 
@@ -30,16 +30,16 @@ initWallkicks()
 // initializing the wallkicks
 function initWallkicks() {
     for (var i = 0; i < 8; i++){
-        wallKickx[i] = [0, 1, 1, 0, 1]; 
+        wallKickc[i] = [0, 1, 1, 0, 1]; 
         if (i==0 || i==3 || i==5 || i==6) {
-            for (var j = 0; j < 5; j++) wallKickx[i][j] *= -1; 
+            for (var j = 0; j < 5; j++) wallKickc[i][j] *= -1; 
         } 
     }
     
     for (var i = 0; i < 8; i++) {
-        wallKicky[i] = [0, 0, 1, -2, -2]; 
+        wallKickr[i] = [0, 0, -1, 2, 2]; 
         if (i==1 || i==2 || i==5 || i==6) {
-            for (var j = 0; j < 5; j++) wallKicky[i][j] *= -1; 
+            for (var j = 0; j < 5; j++) wallKickr[i][j] *= -1; 
         } 
     }
 }
@@ -81,7 +81,7 @@ class Tetromino {
         // o blocks can't rotate 
         if (this.type == 3) return
         for(var kick = 0; kick < 5; kick++){
-            var newR = this.r + wallKickx[2*this.rot][kick], newC = this.c + wallKicky[2*this.rot][kick] 
+            var newR = this.r + wallKickr[2*this.rot][kick], newC = this.c + wallKickc[2*this.rot][kick] 
             if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
                 for (var i = 0; i < 4; i++) {
                     var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
@@ -97,7 +97,7 @@ class Tetromino {
     wallKickRotateCounterClockwise(){
         if(this.type != 3){
             for(var kick = 0; kick < 5; kick++){
-                var newR = this.r + wallKickx[(2*this.rot+7)%8][kick], newC = this.c + wallKicky[(2*this.rot+7)%8][kick] 
+                var newR = this.r + wallKickr[(2*this.rot+7)%8][kick], newC = this.c + wallKickc[(2*this.rot+7)%8][kick] 
                 if(this.checkOccupied(newR, newC, (this.rot+3)%4) == false) {
                     for (var i = 0; i < 4; i++) {
                         var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
@@ -184,7 +184,7 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(1, 5, i, 0); 
+        arr[i] = new Tetromino(2, 5, i, 0); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){
@@ -259,9 +259,13 @@ function swapTetr() {
 function displayHoldBlock() {
     clearHoldBlock()
     for (var i = 0; i < 4; i++) {
+        while(HELD_TETR.rot!=0) HELD_TETR.rotateClockwise()
         let blockElement = document.createElement("div")
         blockElement.classList.add(HELD_TETR.name)
-        blockElement.style.gridRowStart = 3 + HELD_TETR.rArray[i]
+
+        if(HELD_TETR.type == 0) blockElement.style.gridRowStart = 2 + HELD_TETR.rArray[i] 
+        else blockElement.style.gridRowStart = 3 + HELD_TETR.rArray[i]
+
         if (HELD_TETR.type == 3) blockElement.style.gridColumnStart = 5 + HELD_TETR.cArray[i]
         else if (HELD_TETR.type == 0) blockElement.style.gridColumnStart = 3 + HELD_TETR.cArray[i]
         else blockElement.style.gridColumnStart = 4 + HELD_TETR.cArray[i]
