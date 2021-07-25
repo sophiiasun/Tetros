@@ -36,13 +36,20 @@ function naturalDrop(currentTime) {
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
-    removeTetr()
-    if(CURRENT_TETR.getBot() < 20) CURRENT_TETR.r++
-    else{
-        if(queue.length > 0) CURRENT_TETR = queue.shift()
-        else blockGenerator() 
+    
+    if(CURRENT_TETR.getBot() < 20) {
+        CURRENT_TETR.r++
+        removeTetr()
+    } else {
+        if (comingBlocksQueue.length <= 0) blockGenerator()
+        CURRENT_TETR = comingBlocksQueue.shift()
+        CURRENT_BLOCKS = []
     }
     spawnTetr()
+}
+
+function permaDrop() {
+    
 }
 
 function updateDrop() {

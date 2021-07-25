@@ -7,7 +7,7 @@
 // PURPLE: #CC99C9 (BLOCK J)
 
 // wallkicks https://tetris.fandom.com/wiki/SRS
-var wallKickx = [8], wallKicky = [8], gravity = 10, queue = []; 
+var wallKickx = [8], wallKicky = [8], gravity = 10, comingBlocksQueue = []; 
 //queue.shift pops the front 
 initWallkicks()
 // initializing the wallkicks
@@ -34,7 +34,7 @@ class Tetromino {
         this.cArray = [4]; this.rArray = [4]
         // array is processed in clockwise order 
         if (this.type == 0) { // i piece centred at 3rd bottom block
-            this.cArray = [0, 0, 0, 0]; this.rArray = [2, 1, 0, -1]; this.name = "block-i"
+            this.cArray = [2, 1, 0, -1]; this.rArray = [0, 0, 0, 0]; this.name = "block-i"
         } else if (this.type == 1) { // j piece
             this.cArray = [-1, -1, 0, 1]; this.rArray = [1, 0, 0, 0]; this.name = "block-j"
         } else if (this.type == 2) { // l piece  
@@ -125,11 +125,11 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(0, 0, i, 0); 
+        arr[i] = new Tetromino(15, 5, i, 0); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){
-        queue.push(arr[i]); 
+        comingBlocksQueue.push(arr[i]); 
     }
     return arr; 
 }
@@ -154,7 +154,7 @@ function removeTetr() {
 
 // i j l o s t z 
 blockGenerator(); 
-CURRENT_TETR = queue.shift(); 
+CURRENT_TETR = comingBlocksQueue.shift(); 
 
 
 function spawnTetr() {
