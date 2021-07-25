@@ -12,6 +12,7 @@ var template = Array(6).fill(Array(4))
 
 function createTitle() {
     const gridElement = document.createElement("div")
+    gridElement.id = "TITLE"
     gridElement.classList.add("title")
     gridElement.style.gridRowStart = 1
     gridElement.style.gridColumnStart = 1
@@ -37,6 +38,7 @@ function createScore() {
 
 function createLoadingBlock() {
     const gridElement = document.createElement("div")
+    gridElement.id = "LOADING-BLOCK"
     gridElement.classList.add("loading-block")
     gridElement.style.gridRowStart = 3
     gridElement.style.gridColumnStart = 2
@@ -48,6 +50,7 @@ function createLoadingBlock() {
 
 function createHoldBlock() {
     const gridElement = document.createElement("div")
+    gridElement.id = "HOLD-BLOCK"
     gridElement.classList.add("hold-block")
     gridElement.style.gridRowStart = 4
     gridElement.style.gridColumnStart = 1
@@ -71,6 +74,7 @@ function createGameboard() {
 
 function createComingBlocks() {
     const gridElement = document.createElement("div")
+    gridElement.id = "COMING-BLOCKS"
     gridElement.classList.add("coming-blocks")
     gridElement.style.gridRowStart = 4
     gridElement.style.gridColumnStart = 3
@@ -82,6 +86,7 @@ function createComingBlocks() {
 
 function createLevel() {
     const gridElement = document.createElement("div")
+    gridElement.id = "LEVEL"
     gridElement.classList.add("level")
     gridElement.style.gridRowStart = 5
     gridElement.style.gridColumnStart = 2
