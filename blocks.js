@@ -7,7 +7,7 @@
 // PURPLE: #CC99C9 (BLOCK J)
 
 // wallkicks https://tetris.fandom.com/wiki/SRS
-var wallKickx = [8], wallKicky = [8]; 
+var wallKickx = [8], wallKicky = [8], gravity = 10; 
 initWallkicks()
 // initializing the wallkicks
 function initWallkicks() {
@@ -66,6 +66,8 @@ class Tetromino {
             this.cArray[i] *= -1; this.rArray[i] *= -1
         }
     }
+
+
 }
 
 // randomized shuffling : https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
