@@ -45,17 +45,17 @@ class Tetromino {
         if (this.type == 0) { // i piece centred at 3rd bottom block
             this.cArray = [2, 1, 0, -1]; this.rArray = [0, 0, 0, 0]; this.name = "block-i"
         } else if (this.type == 1) { // j piece
-            this.cArray = [-1, -1, 0, 1]; this.rArray = [1, 0, 0, 0]; this.name = "block-j"
+            this.cArray = [-1, -1, 0, 1]; this.rArray = [-1, 0, 0, 0]; this.name = "block-j"
         } else if (this.type == 2) { // l piece  
-            this.cArray = [-1, 0, 1, 1]; this.rArray = [0, 0, 0, 1]; this.name = "block-l"
+            this.cArray = [-1, 0, 1, 1]; this.rArray = [0, 0, 0, -1]; this.name = "block-l"
         } else if (this.type == 3) { // o piece (bottom right is centre) 
-            this.cArray = [-1, -1, 0, 0]; this.rArray = [1, 0, 0, 1]; this.name = "block-o"
+            this.cArray = [-1, -1, 0, 0]; this.rArray = [-1, 0, 0, -1]; this.name = "block-o"
         } else if (this.type == 4) { // s piece 
-            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 1]; this.name = "block-s"
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, -1, -1]; this.name = "block-s"
         } else if (this.type == 5) { // t piece
-            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 0]; this.name = "block-t"
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, -1, 0]; this.name = "block-t"
         } else { // z piece 
-            this.cArray = [-1, 0, 0, 1]; this.rArray = [1, 1, 0, 0]; this.name = "block-z"
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [-1, -1, 0, 0]; this.name = "block-z"
         }
     }
     rotateClockwise(){
@@ -66,33 +66,38 @@ class Tetromino {
         this.rot = (this.rot+1)%4
     }
     wallKickRotateClockwise() {
-        // checking the wallkicks and
-        for(var kick = 0; kick < 5; kick++){
-            var newR = this.r + wallKickx[2*this.rot][kick], newC = this.c + wallKicky[2*this.rot][kick] 
-            if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
-                for (var i = 0; i < 4; i++) {
-                    var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
-                    this.rArray[i] *= -1
-                }
-                this.rot = (this.rot+1)%4, this.r = newR, this.c = newC 
-                console.log(kick); 
-                return
-            }  
+        // checking the wallkicks and rotate
+        // o blocks can't rotate 
+        if(this.type != 3){
+            for(var kick = 0; kick < 5; kick++){
+                var newR = this.r + wallKickx[2*this.rot][kick], newC = this.c + wallKicky[2*this.rot][kick] 
+                if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
+                    for (var i = 0; i < 4; i++) {
+                        var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
+                        this.rArray[i] *= -1
+                    }
+                    this.rot = (this.rot+1)%4, this.r = newR, this.c = newC 
+                    return
+                } 
+                removeTetr()
+                spawnTetr() 
+            }
         }
-        this.respawnTetr()
     }
     rotateCounterClockwise() {
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
             this.cArray[i] *= -1
         }
-        this.respawnTetr()
+        removeTetr()
+        spawnTetr()
     }
     flip() {
         for (var i = 0; i < 4; i++) {
             this.cArray[i] *= -1; this.rArray[i] *= -1
         }
-        this.respawnTetr()
+        removeTetr()
+        spawnTetr()
     }
     getBot() {
         var top = 0; 
@@ -118,12 +123,19 @@ class Tetromino {
     hTranslate(direction) {
         // if direction is 0 move left and 1 is move right 
         if(direction == 0) {
-            if(this.getLeft() > 1) this.c -= 1; ; 
+            if(this.checkOccupied(this.r, this.c-1, this.rot) == false) { 
+                this.c -= 1
+                removeTetr()
+                spawnTetr()
+            }
         }
         else {
-            if(this.getRight() < 10) this.c += 1; 
+            if(this.checkOccupied(this.r, this.c+1, this.rot) == false) {
+                this.c += 1
+                removeTetr()
+                spawnTetr()
+            }
         }
-        this.respawnTetr()
     }
     checkOccupied(row, column, rot) {
         // check if current block translated to row, column is occupied
@@ -131,13 +143,9 @@ class Tetromino {
         while(copy.rot != rot) copy.rotateClockwise(); 
         for(var i = 0; i < 4; i++) {
             var tmpRow = copy.rArray[i] + copy.r, tmpColumn = copy.cArray[i] + copy.c; 
-            if(OCCUPIED[tmpRow][tmpColumn] == true || tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10) return true
+            if(tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10 || OCCUPIED[tmpRow][tmpColumn] == true) return true
         }
         return false
-    }
-    respawnTetr() {
-        removeTetr()
-        spawnTetr()
     }
 }
 
@@ -155,7 +163,7 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(0, 5, i, 0); 
+        arr[i] = new Tetromino(1, 5, i, 0); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){
@@ -176,8 +184,7 @@ function removeTetr() {
 
 // i j l o s t z 
 blockGenerator(); 
-let CURRENT_TETR = comingBlocksQueue.shift(); 
-let HELD_TETR
+CURRENT_TETR = comingBlocksQueue.shift(); 
 
 function spawnTetr() {
     for(var i = 0; i < 4; i++){
@@ -190,7 +197,7 @@ function spawnTetr() {
     }
 }
 
-let COMING_BLOCKS = []
+COMING_BLOCKS = []
 
 function clearComingBlocks() {
     COMING_BLOCKS.forEach(blockElement => {
@@ -215,53 +222,15 @@ function displayComingBlocks() {
     }
 }
 
-let HOLD_BLOCKS = []
-
-function holdBlock() {
-    if (HOLD_BLOCKS.length != 0) { // smth is already held (swap two tetr)
-        swapTetr()
-    } else { // nothing is currently held, hold current block
-        holdTetr()
+function testDisplay() {
+    clearComingBlocks()
+    var tetr = new Tetromino(0, 0, 0)
+    for(var i = 0; i < 4; i++){
+        const blockElement = document.createElement("div")
+        blockElement.classList.add(CURRENT_TETR.name)
+        blockElement.style.gridRowStart = 3 + CURRENT_TETR.rArray[i]; 
+        blockElement.style.gridColumnStart = 3 + CURRENT_TETR.cArray[i]; 
+        COMINGBLOCKS.appendChild(blockElement)
+        COMING_BLOCKS.push(blockElement)
     }
-}
-
-function holdTetr() {
-    HELD_TETR = CURRENT_TETR
-    CURRENT_TETR = comingBlocksQueue.shift()
-    removeTetr()
-    displayHoldBlock()
-    spawnTetr()
-}
-
-function swapTetr() {
-    tmp = CURRENT_TETR
-    CURRENT_TETR = HELD_TETR
-    HELD_TETR = tmp
-    CURRENT_TETR.r = HELD_TETR.r
-    CURRENT_TETR.c = HELD_TETR.c
-    removeTetr()
-    displayHoldBlock()
-    spawnTetr()
-}
-
-function displayHoldBlock() {
-    clearHoldBlock()
-    for (var i = 0; i < 4; i++) {
-        let blockElement = document.createElement("div")
-        blockElement.classList.add(HELD_TETR.name)
-        blockElement.style.gridRowStart = 2 + HELD_TETR.rArray[i]
-        if (HELD_TETR.type == 3) blockElement.style.gridColumnStart = 5 + HELD_TETR.cArray[i]
-        else if (HELD_TETR.type == 0) blockElement.style.gridColumnStart = 3 + HELD_TETR.cArray[i]
-        else blockElement.style.gridColumnStart = 4 + HELD_TETR.cArray[i]
-        HOLDBLOCK.appendChild(blockElement)
-        HOLD_BLOCKS.push(blockElement)
-    }
-}
-
-function clearHoldBlock() {
-    if (HOLD_BLOCKS.length == 0) return
-    HOLD_BLOCKS.forEach(blockElement => {
-        HOLDBLOCK.removeChild(blockElement)
-    })
-    HOLD_BLOCKS = []
 }
