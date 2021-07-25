@@ -205,7 +205,48 @@ function clearComingBlocks() {
     })
     COMING_BLOCKS = []
 }
+let HOLD_BLOCKS = []
 
+function holdBlock() {
+    if (HOLD_BLOCKS.length != 0) { // smth is already held (swap two tetr)
+        swapTetr()
+    } else { // nothing is currently held, hold current block
+        holdTetr()
+    }
+}
+
+function holdTetr() {
+    HELD_TETR = CURRENT_TETR
+    CURRENT_TETR = comingBlocksQueue.shift()
+    removeTetr()
+    displayHoldBlock()
+    spawnTetr()
+}
+
+function swapTetr() {
+    tmp = CURRENT_TETR
+    CURRENT_TETR = HELD_TETR
+    HELD_TETR = tmp
+    CURRENT_TETR.r = HELD_TETR.r
+    CURRENT_TETR.c = HELD_TETR.c
+    removeTetr()
+    displayHoldBlock()
+    spawnTetr()
+}
+
+function displayHoldBlock() {
+    clearHoldBlock()
+    for (var i = 0; i < 4; i++) {
+        let blockElement = document.createElement("div")
+        blockElement.classList.add(HELD_TETR.name)
+        blockElement.style.gridRowStart = 2 + HELD_TETR.rArray[i]
+        if (HELD_TETR.type == 3) blockElement.style.gridColumnStart = 5 + HELD_TETR.cArray[i]
+        else if (HELD_TETR.type == 0) blockElement.style.gridColumnStart = 3 + HELD_TETR.cArray[i]
+        else blockElement.style.gridColumnStart = 4 + HELD_TETR.cArray[i]
+        HOLDBLOCK.appendChild(blockElement)
+        HOLD_BLOCKS.push(blockElement)
+    }
+}
 function displayComingBlocks() {
     clearComingBlocks()
     for (var i = 1; i <= 5; i++) {
@@ -233,4 +274,12 @@ function testDisplay() {
         COMINGBLOCKS.appendChild(blockElement)
         COMING_BLOCKS.push(blockElement)
     }
+}
+
+function clearHoldBlock() {
+    if (HOLD_BLOCKS.length == 0) return
+    HOLD_BLOCKS.forEach(blockElement => {
+        HOLDBLOCK.removeChild(blockElement)
+    })
+    HOLD_BLOCKS = []
 }
