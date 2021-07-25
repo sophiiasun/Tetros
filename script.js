@@ -41,6 +41,9 @@ function naturalDrop(currentTime) {
         CURRENT_TETR.r++
         removeTetr()
     } else {
+        for(var i = 0; i < 4; i++){
+            OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]]
+        }
         if (comingBlocksQueue.length <= 0) blockGenerator()
         CURRENT_TETR = comingBlocksQueue.shift()
         CURRENT_BLOCKS = []
