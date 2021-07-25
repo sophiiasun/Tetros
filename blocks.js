@@ -331,8 +331,75 @@ function hardDrop() {
     HELDBLOCK = false 
     spawnTetr()
     dropBlockEffect()
+    storeBlocks()
+    clearLine()
     CURRENT_TETR = comingBlocksQueue.shift()
     CURRENT_BLOCKS = []
     spawnTetr()
     displayComingBlocks()
+}
+
+let BOARD_BLOCKS = []
+
+function storeBlocks() {
+    CURRENT_BLOCKS.forEach(block => {
+        BOARD_BLOCKS.push(block)
+    })
+}
+
+function removeAllBlocks() {
+    BOARD_BLOCKS.forEach(block => {
+        GAMEBOARD.removeChild(block)
+    })
+}
+
+function drawAllBlocks(clearRows) {
+    let tmp = []
+    BOARD_BLOCKS.forEach(block => {
+        if (!clearRows.has(block.style.gridRowStart)) tmp.push(block)
+    })
+    BOARD_BLOCKS = []
+    tmp.forEach(block => {
+        GAMEBOARD.appendChild(block)
+        BOARD_BLOCKS.push(block)
+    })
+}
+
+function clearLine() {
+    let clearRows = new Set()
+    CURRENT_TETR.rArray.forEach(r => {
+        clearRows.add(CURRENT_TETR.r + r)
+    })
+    clearRows.forEach(r => { 
+        if (!checkRowClear(r)) clearRows.delete(r) 
+    })
+    if (clearRows.size == 0) return
+    clearRows.forEach(row => {
+        BOARD_BLOCKS.forEach(block => {
+            if (block.style.gridRowStart == row) GAMEBOARD.removeChild(block)
+            else if (block.style.gridRowStart < row) block.style.gridRowStart++
+        })
+        shiftOccupied(row)
+    })    
+    let tmp = []
+    BOARD_BLOCKS.forEach(block => {
+        if (!clearRows.has(block.style.gridRowStart)) tmp.push(block)
+    })
+    BOARD_BLOCKS = []
+    tmp.forEach(block => {
+        BOARD_BLOCKS.push(block)
+    })
+}
+
+function shiftOccupied(row) {
+    for (var r = row; r > 1; r--) {
+        OCCUPIED[r] = OCCUPIED[r-1].slice()
+    }
+}
+
+function checkRowClear(row) {
+    for (var i = 1; i <= 10; i++) {
+        if (OCCUPIED[row][i] == false) return false
+    }
+    return true
 }

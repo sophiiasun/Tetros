@@ -86,6 +86,7 @@ function naturalDrop(currentTime) {
                 OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
             }
             dropBlockEffect()
+            storeBlocks()
             CURRENT_TETR = comingBlocksQueue.shift()
             CURRENT_BLOCKS = []
             spawnTetr()
