@@ -221,6 +221,7 @@ function holdTetr() {
     removeTetr()
     displayHoldBlock()
     spawnTetr()
+    displayComingBlocks()
 }
 
 function swapTetr() {
@@ -254,7 +255,7 @@ function displayComingBlocks() {
         for (var j = 0; j < 4; j++) {
             let blockElement = document.createElement("div")
             blockElement.classList.add(tetr.name)
-            blockElement.style.gridRowStart = i * 3 - 1 + tetr.rArray[j]
+            blockElement.style.gridRowStart = i * 3 + tetr.rArray[j]
             if (tetr.type == 3) blockElement.style.gridColumnStart = 4 + tetr.cArray[j]
             else blockElement.style.gridColumnStart = 3 + tetr.cArray[j]
             COMINGBLOCKS.appendChild(blockElement)
