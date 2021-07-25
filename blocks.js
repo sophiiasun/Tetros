@@ -1,3 +1,11 @@
+// BLOCK COLOURS:
+// RED:    #FF6663 (BLOCK Z)
+// ORANGE: #FEB144 (BLOCK L)
+// YELLOW: #FDFD97 (BLOCK O)
+// GREEN:  #9EE09E (BLCOK S)
+// BLUE:   #9EC1CF (BLOCK I)
+// PURPLE: #CC99C9 (BLOCK J)
+
 // wallkicks https://tetris.fandom.com/wiki/SRS
 var wallKickx = [8], wallKicky = [8]; 
 initWallkicks()
@@ -18,50 +26,51 @@ function initWallkicks() {
     }
 }
 
-function Block(x, y, type, rot){ // vs code suggests to change to class? lmk if that's what u want
-    this.x = x; this.y = y; 
-    this.type = type; 
-    this.rot = rot; 
-    this.xArray = [4]; this.yArray = [4]; 
-    // array is processed in clockwise order 
-    if(this.type == 0) {
-        // i piece centred at 3rd bottom block
-        this.xArray = [0, 0, 0, 0]; this.yArray = [2, 1, 0, -1]; 
-    } else if(this.type == 1) { // j piece
-        this.xArray = [-1, -1, 0, 1]; this.yArray = [1, 0, 0, 0]; 
-    } else if (this.type == 2) { // l piece  
-        this.xArray = [-1, 0, 1, 1]; this.yArray = [0, 0, 0, 1];
-    } else if (this.type==3) { // o piece (bottom right is centre) 
-        this.xArray = [-1, -1, 0, 0]; this.yArray = [1, 0, 0, 1]; 
-    } else if (this.type==4) { // s piece 
-        this.xArray = [-1, 0, 0, 1]; this.yArray = [0, 0, 1, 1]; 
-    } else if (this.type==5) { // t piece
-        this.xArray = [-1, 0, 0, 1]; this.yArray = [0, 0, 1, 0];  
-    } else { // z piece 
-        this.xArray = [-1, 0, 0, 1]; this.yArray = [1, 1, 0, 0];
-    }   
-    this.rotateClockwise = function(){ // (x, y) ==> (y, -x); 
-        for(var i = 0; i < 4; i++){
-            var tmp = this.xArray[i]; this.xArray[i] = this.yArray[i];  this.yArray[i] = tmp; 
-            this.yArray[i] *= -1; 
+class Tetromino {
+    constructor(r, c, type, rot) {
+        this.r = r, this.c = c
+        this.type = type
+        this.rot = rot
+        this.cArray = [4]; this.rArray = [4]
+        // array is processed in clockwise order 
+        if (this.type == 0) { // i piece centred at 3rd bottom block
+            this.cArray = [0, 0, 0, 0]; this.rArray = [2, 1, 0, -1]
+        } else if (this.type == 1) { // j piece
+            this.cArray = [-1, -1, 0, 1]; this.rArray = [1, 0, 0, 0]
+        } else if (this.type == 2) { // l piece  
+            this.cArray = [-1, 0, 1, 1]; this.rArray = [0, 0, 0, 1]
+        } else if (this.type == 3) { // o piece (bottom right is centre) 
+            this.cArray = [-1, -1, 0, 0]; this.rArray = [1, 0, 0, 1]
+        } else if (this.type == 4) { // s piece 
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 1]
+        } else if (this.type == 5) { // t piece
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [0, 0, 1, 0]
+        } else { // z piece 
+            this.cArray = [-1, 0, 0, 1]; this.rArray = [1, 1, 0, 0]
         }
     }
-    this.rotateCounterClockwise = function(){ // (x,y ) ==> (-y, x)
-        for(var i = 0; i < 4; i++){
-            var tmp = this.xArray[i]; this.xArray[i] = this.yArray[i]; this.yArray[i] = tmp; 
-            this.xArray[i] *= -1; 
+    rotateClockwise() {
+        for (var i = 0; i < 4; i++) {
+            var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
+            this.rArray[i] *= -1
         }
     }
-    this.flip = function(){ // (x,y ) ==> (-y, x)
-        for(var i = 0; i < 4; i++){
-            this.xArray[i] *= -1; this.yArray[i] *=-1;  
+    rotateCounterClockwise() {
+        for (var i = 0; i < 4; i++) {
+            var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
+            this.cArray[i] *= -1
+        }
+    }
+    flip() {
+        for (var i = 0; i < 4; i++) {
+            this.cArray[i] *= -1; this.rArray[i] *= -1
         }
     }
 }
 
 // randomized shuffling : https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffle(array) {
-    var currentIndex = array.length,  randomIndex;
+    var currentIndex = array.length, randomIndex;
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
@@ -70,11 +79,35 @@ function shuffle(array) {
     return array;
   }
 
-function blockGenerator(){
+  function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Block(0, 0, i, 0); 
+        arr[i] = new Tetromino(0, 0, i, 0); 
     }
     arr = shuffle(arr); 
     return arr; 
+}
+
+function testSpawn() {
+    const GAMEBOARD = document.getElementById("GAMEBOARD")
+    const blockElement = document.createElement("div")
+    blockElement.classList.add("block-i")
+    blockElement.style.gridRowStart = 5
+    blockElement.style.gridColumnStart = 5
+    GAMEBOARD.appendChild(blockElement)
+}
+
+
+function spawnBlock() {
+    const GAMEBOARD = document.getElementById("GAMEBOARD")
+    tetr = new Tetromino(1, 5, 0, 0)
+    tetr.rArray.forEach(col => {
+        tetr.cArray.forEach(row => {
+            const blockElement = document.createElement("div")
+            blockElement.classList.add("block-i")
+            blockElement.style.gridRowStart = tetr.r + row
+            blockElement.style.gridColumnStart = tetr.c + col
+            GAMEBOARD.appendChild(blockElement)
+        })
+    })
 }

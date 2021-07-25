@@ -6,8 +6,8 @@ TEMPLATE = document.getElementById("template")
 // GAMEBOARD = document.getElementById("game-board")
 // COMING_BLOCKS = document.getElementById("coming-blocks")
 
-// board = [] // ENTIRE CSS GRID
-data = []
+var data = []
+
 
 document.onkeydown = function(e) {
     switch(e.which) {
@@ -21,6 +21,8 @@ document.onkeydown = function(e) {
 main()
 function main () {
     createBoard()
+    // testSpawn()
+    spawnBlock()
 }
 
 
