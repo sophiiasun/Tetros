@@ -33,16 +33,16 @@ function main () {
 
 function naturalDrop(currentTime) {
     window.requestAnimationFrame(naturalDrop)
-    const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
+    const secondsSinceLastRender = (currentTime - lastRenderTime) / 100
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
     
-    if(CURRENT_TETR.getBot() < 20) {
+    if(CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c) == false) { 
         CURRENT_TETR.r++
         removeTetr()
     } else {
         for(var i = 0; i < 4; i++){
-            OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]]
+            OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
         }
         if (comingBlocksQueue.length <= 0) blockGenerator()
         CURRENT_TETR = comingBlocksQueue.shift()

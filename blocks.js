@@ -9,7 +9,12 @@
 // wallkicks https://tetris.fandom.com/wiki/SRS
 var wallKickx = [8], wallKicky = [8], gravity = 10, comingBlocksQueue = []; 
 //queue.shift pops the front 
-var OCCUPIED = [21][11]; 
+var OCCUPIED = [25][15]; 
+
+OCCUPIED = Array.from({ length: 25 }, () => 
+  Array.from({ length: 15 }, () => false)
+);
+
 
 initWallkicks()
 // initializing the wallkicks
@@ -74,31 +79,27 @@ class Tetromino {
         removeTetr()
         spawnTetr()
     }
-
-    getBot(){
+    getBot() {
         var top = 0; 
         for(var i = 0; i < 4; i++){
             top = Math.max(top, this.rArray[i] + this.r); 
         }
         return top; 
     }
-
-    getLeft(){
+    getLeft() {
         var lft = 10; 
         for(var i = 0; i < 4; i++){
             lft = Math.min(lft, this.cArray[i] + this.c); 
         }
         return lft; 
     }
-
-    getRight(){
+    getRight() {
         var rt = 0; 
         for(var i = 0; i < 4; i++){
             rt = Math.max(rt, this.cArray[i] + this.c); 
         }
         return rt; 
     }
-
     hTranslate(direction) {
         // if direction is 0 move left and 1 is move right 
         if(direction == 0) {
@@ -110,7 +111,24 @@ class Tetromino {
         removeTetr()
         spawnTetr()
     }
+    checkOccupied(row, column) {
+        // check if current block translated to row, column is occupied
+        for(var i = 0; i < 4; i++) {
+            var tmpRow = this.rArray[i] + row, tmpColumn = this.cArray[i] + column; 
+            if(OCCUPIED[tmpRow][tmpColumn] == true || tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10) return true;  
+        }
+        return false; 
+    }
 
+    checkRotate(){
+        var tmpRowArray = [4], tmpColumnArray = [4]; 
+        for(var i = 0; i < 4; i++) {
+            tmpRowArray[i] = -1 * this.cArray[i]; tmpColumnArray[i] = this.rArray; 
+            var tmpRow = tmpRowArray[i] + this.r, tmpColumn = tmpColumnArray[i] + this.c;  
+            if(OCCUPIED[tmpRow][tmpColumn]) return false; 
+        }
+        return true; 
+    }
 }
 
 // randomized shuffling : https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -127,7 +145,7 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(15, 5, i); 
+        arr[i] = new Tetromino(0, 5, i); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){
