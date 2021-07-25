@@ -8,6 +8,7 @@ var DROP_SPEED = 1
 
 let lastRenderTime = 0
 let dropTime = 0
+let hasBlockMoved = true
 
 document.onkeydown = function(e) {
     switch(e.which) {
@@ -27,6 +28,7 @@ document.onkeydown = function(e) {
             holdBlock()
             break
     }
+    hasBlockMoved = true
 }
 
 main()
@@ -42,7 +44,9 @@ function main () {
     
 }
 
-
+function getCurrentTime(currentTime) {
+    dropTime = currentTime
+}
 
 function naturalDrop(currentTime) {
     window.requestAnimationFrame(naturalDrop)
@@ -52,19 +56,26 @@ function naturalDrop(currentTime) {
     
     if (CURRENT_TETR.checkOccupied(CURRENT_TETR.r+1, CURRENT_TETR.c, CURRENT_TETR.rot) == false) { 
         CURRENT_TETR.r++
-        removeTetr(CURRENT_BLOCKS, GAMEBOARD)
+        removeTetr()
+        spawnTetr()
+        hasBlockMoved = true
     } else { // is occupied
-        for(var i = 0; i < 4; i++){
-            OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
+        if (hasBlockMoved == true) dropTime = currentTime
+        if ((currentTime - dropTime)/1000 >= 1.5) {
+            for(var i = 0; i < 4; i++){
+                OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
+            }
+            dropBlockEffect()
+            CURRENT_TETR = comingBlocksQueue.shift()
+            CURRENT_BLOCKS = []
+            spawnTetr()
         }
         if (comingBlocksQueue.length < 7) blockGenerator()
-        CURRENT_TETR = comingBlocksQueue.shift()
-        CURRENT_BLOCKS = []
         displayComingBlocks()
+        hasBlockMoved = false
     }
     // testDisplay()
-    spawnTetr()
-    dropTime = currentTime
+    // spawnTetr()
 }
 
 function permaDrop() {

@@ -3,8 +3,18 @@
 // ORANGE: #FEB144 (BLOCK L)
 // YELLOW: #FDFD97 (BLOCK O)
 // GREEN:  #9EE09E (BLCOK S)
-// BLUE:   #9EC1CF (BLOCK I)
-// PURPLE: #CC99C9 (BLOCK J)
+// AQUA:   #9EC1CF (BLOCK I)
+// BLUE:   #3A587A (BLOCK J)
+// PURPLE: #CC99C9 (BLOCK T)
+
+const blockColoursMap = new Map()
+blockColoursMap.set("block-z", "#FF6663")
+blockColoursMap.set("block-l", "#FEB144")
+blockColoursMap.set("block-o", "#FDFD97")
+blockColoursMap.set("block-s", "#9EE09E")
+blockColoursMap.set("block-i", "#9EC1CF")
+blockColoursMap.set("block-j", "#3A587A")
+blockColoursMap.set("block-t", "#CC99C9")
 
 // wallkicks https://tetris.fandom.com/wiki/SRS
 var wallKickx = [8], wallKicky = [8], gravity = 10, comingBlocksQueue = []; 
@@ -68,36 +78,33 @@ class Tetromino {
     wallKickRotateClockwise() {
         // checking the wallkicks and rotate
         // o blocks can't rotate 
-        if(this.type != 3){
-            for(var kick = 0; kick < 5; kick++){
-                var newR = this.r + wallKickx[2*this.rot][kick], newC = this.c + wallKicky[2*this.rot][kick] 
-                if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
-                    for (var i = 0; i < 4; i++) {
-                        var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
-                        this.rArray[i] *= -1
-                    }
-                    this.rot = (this.rot+1)%4, this.r = newR, this.c = newC 
-                    return
-                } 
-                removeTetr()
-                spawnTetr() 
-            }
+        if (this.type == 3) return
+        for(var kick = 0; kick < 5; kick++){
+            var newR = this.r + wallKickx[2*this.rot][kick], newC = this.c + wallKicky[2*this.rot][kick] 
+            if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
+                for (var i = 0; i < 4; i++) {
+                    var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
+                    this.rArray[i] *= -1
+                }
+                this.rot = (this.rot+1)%4, this.r = newR, this.c = newC 
+                this.respawnBlock() 
+                return
+            } 
         }
+        
     }
     rotateCounterClockwise() {
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
             this.cArray[i] *= -1
         }
-        removeTetr()
-        spawnTetr()
+        this.respawnBlock()
     }
     flip() {
         for (var i = 0; i < 4; i++) {
             this.cArray[i] *= -1; this.rArray[i] *= -1
         }
-        removeTetr()
-        spawnTetr()
+        this.respawnBlock()
     }
     getBot() {
         var top = 0; 
@@ -125,15 +132,13 @@ class Tetromino {
         if(direction == 0) {
             if(this.checkOccupied(this.r, this.c-1, this.rot) == false) { 
                 this.c -= 1
-                removeTetr()
-                spawnTetr()
+                this.respawnBlock()
             }
         }
         else {
             if(this.checkOccupied(this.r, this.c+1, this.rot) == false) {
                 this.c += 1
-                removeTetr()
-                spawnTetr()
+                this.respawnBlock()
             }
         }
     }
@@ -146,6 +151,10 @@ class Tetromino {
             if(tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10 || OCCUPIED[tmpRow][tmpColumn] == true) return true
         }
         return false
+    }
+    respawnBlock() {
+        removeTetr()
+        spawnTetr()
     }
 }
 
@@ -283,4 +292,11 @@ function clearHoldBlock() {
         HOLDBLOCK.removeChild(blockElement)
     })
     HOLD_BLOCKS = []
+}
+
+function dropBlockEffect() {
+    CURRENT_BLOCKS.forEach(block => {
+        block.style.borderColor = "#7F7F7F"
+        // block.style.borderColor = blockColoursMap.get(CURRENT_TETR.name)
+    })
 }
