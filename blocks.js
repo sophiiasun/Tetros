@@ -188,6 +188,19 @@ function spawnTetr() {
     }
 }
 
-function getHoverBlock() {
+COMING_BLOCKS = []
 
+function displayComingBlocks() {
+    const COMINGBLOCKS = document.getElementById("COMING-BLOCKS")
+    for (var i = 0; i < 5; i++) {
+        var tetr = comingBlocksQueue[i]
+        for (var j = 1; j <= 4; j++) {
+            const blockElement = document.createElement("div")
+            blockElement.classList.add(tetr.name)
+            blockElement.style.gridRowStart = j * 3 - 1 + tetr.rArray[i]
+            blockElement.style.gridColStart = 2 + tetr.cArray[i]
+            COMINGBLOCKS.appendChild(blockElement)
+            COMING_BLOCKS.push(blockElement)
+        }
+    }
 }
