@@ -328,6 +328,7 @@ function hardDrop() {
             break
         }
     }
+    HELDBLOCK = false 
     spawnTetr()
     dropBlockEffect()
     CURRENT_TETR = comingBlocksQueue.shift()

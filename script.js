@@ -4,6 +4,7 @@ const TEMPLATE = document.getElementById("template")
 let GAMEBOARD, COMINGBLOCKS, HOLDBLOCK 
 var data = []
 var DROP_SPEED = 1, NATURAL_DROP_SPEED = 1
+var HELDBLOCK = false 
 
 let lastRenderTime = 0
 let dropTime = 0
@@ -32,7 +33,10 @@ document.onkeydown = function(e) {
             break
         case 67: // letter c
             // alert("pressed c")
-            holdBlock()
+            if(HELDBLOCK == false) {
+                HELDBLOCK = true 
+                holdBlock()
+            }
             break
     }
     // hasBlockMoved = true
@@ -88,7 +92,8 @@ function naturalDrop(currentTime) {
         }
         
         displayComingBlocks()
-        hasBlockMoved = false
+        hasBlockMoved = false 
+        HELDBLOCK = false 
     }
     // testDisplay()
     // spawnTetr()
