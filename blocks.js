@@ -125,7 +125,7 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(15, 5, i, 0); 
+        arr[i] = new Tetromino(15, 5, i); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){
@@ -154,8 +154,7 @@ function removeTetr() {
 
 // i j l o s t z 
 blockGenerator(); 
-CURRENT_TETR = comingBlocksQueue.shift(); 
-
+CURRENT_TETR = new Tetromino(15, 5, 5); 
 
 function spawnTetr() {
     const GAMEBOARD = document.getElementById("GAMEBOARD")
