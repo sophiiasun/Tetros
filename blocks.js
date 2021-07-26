@@ -216,6 +216,7 @@ function spawnTetr() {
         GAMEBOARD.appendChild(blockElement)
         CURRENT_BLOCKS.push(blockElement)
     }
+    displayHoverBlock()
 }
 
 COMING_BLOCKS = []
@@ -391,4 +392,32 @@ function checkRowClear(row) {
         if (OCCUPIED[row][i] == false) return false
     }
     return true
+}
+
+let HOVER_BLOCKS = []
+
+function displayHoverBlock() {
+    removeHoverBlock()
+    let highestRow 
+    for (var i = 20; i >= 2; i--) {
+        if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) {
+            highestRow = i; break
+        }
+    }
+    for (var i = 0; i < 4; i++) {
+        const hoverBlock = document.createElement("div")
+        hoverBlock.classList.add("hover-block")
+        hoverBlock.style.gridRowStart = highestRow + CURRENT_TETR.rArray[i]
+        hoverBlock.style.gridColumnStart = CURRENT_TETR.c +  CURRENT_TETR.cArray[i]
+        GAMEBOARD.appendChild(hoverBlock)
+        HOVER_BLOCKS.push(hoverBlock)
+    }
+}
+
+function removeHoverBlock() {
+    if (HOVER_BLOCKS.length == 0) return
+    HOVER_BLOCKS.forEach(block => {
+        GAMEBOARD.removeChild(block)
+    })
+    HOVER_BLOCKS = []
 }
