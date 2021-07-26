@@ -404,6 +404,8 @@ function displayHoverBlock() {
             highestRow = i; break
         }
     }
+    console.log(highestRow + " " + CURRENT_TETR.r); 
+    if(highestRow == CURRENT_TETR.r) return
     for (var i = 0; i < 4; i++) {
         const hoverBlock = document.createElement("div")
         hoverBlock.classList.add("hover-block")
