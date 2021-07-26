@@ -10,6 +10,8 @@ let lastRenderTime = 0
 let dropTime = 0
 let hasBlockMoved = true
 
+let gameStart = true
+
 document.onkeydown = function(e) {
     switch(e.which) {
         case 32: // space
@@ -37,6 +39,7 @@ document.onkeydown = function(e) {
             }
             break
     }
+    if (gameStart) { playMusicBGM(); gameStart = false }
 }
 
 document.onkeyup = function (e) {
@@ -57,7 +60,6 @@ function main () {
     spawnTetr()
     displayComingBlocks()
     naturalDrop()
-    
 }
 
 function getCurrentTime(currentTime) {
@@ -95,12 +97,11 @@ function naturalDrop(currentTime) {
     }
 }
 
-function permaDrop() {
-    
-}
-
-function updateDrop() {
-    
+function playMusicBGM() {
+    const BGM = new Audio('tetris BGM.mp3')
+    BGM.volume = 0.1
+    BGM.play()
+    BGM.loop = true
 }
 
 window.requestAnimationFrame(naturalDrop)
