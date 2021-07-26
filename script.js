@@ -86,6 +86,7 @@ function naturalDrop(currentTime) {
             }
             dropBlockEffect()
             storeBlocks()
+            clearLine(); 
             CURRENT_TETR = comingBlocksQueue.shift()
             CURRENT_BLOCKS = []
             spawnTetr()
