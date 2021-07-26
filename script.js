@@ -13,7 +13,6 @@ let hasBlockMoved = true
 document.onkeydown = function(e) {
     switch(e.which) {
         case 32: // space
-            // alert("hard drop")
             hardDrop()
             break
         case 37: // left
@@ -25,21 +24,19 @@ document.onkeydown = function(e) {
         case 39: // right
             CURRENT_TETR.hTranslate(1)
             break
-        case 90 : // z jey
+        case 90 : // z key
             CURRENT_TETR.wallKickRotateCounterClockwise() 
             break  
         case 40: // down
             DROP_SPEED = NATURAL_DROP_SPEED * 30
             break
         case 67: // letter c
-            // alert("pressed c")
             if(HELDBLOCK == false) {
                 HELDBLOCK = true 
                 holdBlock()
             }
             break
     }
-    // hasBlockMoved = true
 }
 
 document.onkeyup = function (e) {
@@ -96,8 +93,6 @@ function naturalDrop(currentTime) {
         hasBlockMoved = false 
         HELDBLOCK = false 
     }
-    // testDisplay()
-    // spawnTetr()
 }
 
 function permaDrop() {

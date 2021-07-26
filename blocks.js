@@ -347,66 +347,32 @@ function storeBlocks() {
     })
 }
 
-function removeAllBlocks() {
-    BOARD_BLOCKS.forEach(block => {
-        GAMEBOARD.removeChild(block)
-    })
-}
-
-function drawAllBlocks(clearRows) {
-    let tmp = []
-    BOARD_BLOCKS.forEach(block => {
-        if (!clearRows.has(block.style.gridRowStart)) tmp.push(block)
-    })
-    BOARD_BLOCKS = []
-    tmp.forEach(block => {
-        GAMEBOARD.appendChild(block)
-        BOARD_BLOCKS.push(block)
-    })
-}
-
 function clearLine() {
-    var clearRows = []
+    let clearRows = []
     CURRENT_TETR.rArray.forEach(r => {
-        if(clearRows.includes(CURRENT_TETR.r + r) == false && checkRowClear(CURRENT_TETR.r + r)) clearRows.push(CURRENT_TETR.r + r)
+        if (!clearRows.includes(CURRENT_TETR.r + r) && checkRowClear(CURRENT_TETR.r + r)) 
+            clearRows.push(CURRENT_TETR.r + r)
     })
-    clearRows.sort(function(a, b) {
-        return a - b;
-    })
-    clearRows.forEach(r => { 
-        console.log(r); 
-    })
-    if (clearRows.length == 0) return
-    var cnt = [21]; 
-    cnt = Array.from({ length: 21 }, () => 0);
-    BOARD_BLOCKS.forEach(block => {
-        cnt[block.style.gridRowStart] += 1
-    })
-    for(var i = 13; i < 21; i++) console.log(i + " " + cnt[i]);   
-    clearRows.forEach(row => {
-        console.log(row + "<-")
-        BOARD_BLOCKS.forEach(block => {
-            if (block.style.gridRowStart == row){
-                GAMEBOARD.removeChild(block)
-                BOARD_BLOCKS.splice(BOARD_BLOCKS.indexOf(block), 1); 
-            }
-        })
-        shiftOccupied(row)
-    })    
-    clearRows.forEach(row => {
-        BOARD_BLOCKS.forEach(block => {
-            if (block.style.gridRowStart < row) block.style.gridRowStart++
-        })
-        shiftOccupied(row)
-    })    
-    cnt = Array.from({ length: 21 }, () => 0);
-    BOARD_BLOCKS.forEach(block => {
-        cnt[block.style.gridRowStart] += 1
-    })
-    for(var i = 0; i < 21; i++) console.log(i + " " + cnt[i]);   
+    if (clearRows.size == 0) return
+    clearRows.sort(function(a, b) { return a - b })
     let tmp = []
     BOARD_BLOCKS.forEach(block => {
-        if (!clearRows.includes(block.style.gridRowStart)) tmp.push(block)
+        var cnt = 0 // number of rows to shift up
+        clearRows.forEach(row => {
+            if (row == block.style.gridRowStart) {
+                GAMEBOARD.removeChild(block)
+                cnt = -10000;
+            }
+            else if (row > block.style.gridRowStart) cnt++ 
+        })
+        if (cnt >= 0) {
+            tmp.push(block)
+            block.style.gridRowStart = parseInt(block.style.gridRowStart) + parseInt(cnt)
+        }
+    })
+
+    clearRows.forEach(row => {
+        shiftOccupied(row)
     })
     BOARD_BLOCKS = []
     tmp.forEach(block => {
