@@ -378,8 +378,10 @@ function storeBlocks() {
         BOARD_BLOCKS.push(block)
     })
 }
-
-function clearLine() {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+async function clearLine() {
     let clearRows = []
     CURRENT_TETR.rArray.forEach(r => {
         if (!clearRows.includes(CURRENT_TETR.r + r) && checkRowClear(CURRENT_TETR.r + r)) 
@@ -393,15 +395,20 @@ function clearLine() {
     clearedLineCounter += clearRows.length
     if(clearedLineCounter >= 10){
         clearedLineCounter -= 10, LEVEL += 1
-        NATURAL_DROP_SPEED *= 1.41; DROP_SPEED *= 1.41;  
+        NATURAL_DROP_SPEED *= 1.44; DROP_SPEED *= 1.44;  
     }
     clearRows.sort(function(a, b) { return a - b })
     let tmp = []
     BOARD_BLOCKS.forEach(block => {
+        clearRows.forEach(row => {
+            if (row == block.style.gridRowStart) block.style.borderColor = "#d3d3d3"
+        })
+    })
+    await sleep (150) 
+    BOARD_BLOCKS.forEach(block => {
         var cnt = 0 // number of rows to shift up
         clearRows.forEach(row => {
             if (row == block.style.gridRowStart) {
-                block.style.borderColor = "white"
                 GAMEBOARD.removeChild(block)
                 cnt = -10000;
             }

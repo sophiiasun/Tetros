@@ -97,11 +97,11 @@ function naturalDrop(currentTime) {
             CURRENT_TETR = comingBlocksQueue.shift()
             CURRENT_BLOCKS = []
             spawnTetr()
+            HELDBLOCK = false 
         }
         
         displayComingBlocks()
         hasBlockMoved = false 
-        HELDBLOCK = false 
     }
 }
 
