@@ -21,6 +21,19 @@ var wallKickr = [8], wallKickc = [8], comingBlocksQueue = [];
 //queue.shift pops the front 
 var OCCUPIED = [25][15]; 
 
+var iWallKickc = [
+    [0, -1, 2, 2, -1], [0, 2, -1, 2, -1],
+    [0, -1, 2, -1, 2], [0, 1, -2, 1, -2], 
+    [0, 2, -1, 2, -1], [0, -2, 1, -2, 1],
+    [0, 1, -2, 1, -2], [0, -1, 2, -1, 2]
+],
+iWallKickr = [
+    [0, 0, 0, 1, -2], [0, 0, 0, -1, 2], 
+    [0, 0, 0, -2, 1], [0, 0, 0, 3, -2], 
+    [0, 0, 0, -2, 3], [0, 0, 0, 1, -2], 
+    [0, 0, 0, 2, -1], [0, 0, 0, -2, 1], 
+]
+
 OCCUPIED = Array.from({ length: 25 }, () => 
   Array.from({ length: 15 }, () => false)
 );
@@ -81,7 +94,10 @@ class Tetromino {
         // o blocks can't rotate 
         if (this.type == 3) return
         for(var kick = 0; kick < 5; kick++){
-            var newR = this.r + wallKickr[2*this.rot][kick], newC = this.c + wallKickc[2*this.rot][kick] 
+            var newR = this.r + wallKickr[2*this.rot][kick], newC = this.c + wallKickc[2*this.rot][kick]
+            if(this.type == 0){
+                newR = this.r + iWallKickr[2*this.rot][kick], newC = this.c + iWallKickc[2*this.rot][kick] 
+            }
             if(this.checkOccupied(newR, newC, (this.rot+1)%4) == false) {
                 for (var i = 0; i < 4; i++) {
                     var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
@@ -98,6 +114,9 @@ class Tetromino {
         if(this.type != 3){
             for(var kick = 0; kick < 5; kick++){
                 var newR = this.r + wallKickr[(2*this.rot+7)%8][kick], newC = this.c + wallKickc[(2*this.rot+7)%8][kick] 
+                if(this.type == 0){
+                    newR = this.r + iWallKickr[(2*this.rot+7)%8][kick], newC = this.c + iWallKickc[(2*this.rot+7)%8][kick]  
+                }
                 if(this.checkOccupied(newR, newC, (this.rot+3)%4) == false) {
                     for (var i = 0; i < 4; i++) {
                         var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
@@ -385,12 +404,11 @@ let HOVER_BLOCKS = []
 
 function displayHoverBlock() {
     removeHoverBlock()
-    let highestRow 
-    for (var i = 2; i <= 20; i++) {
+    let highestRow = CURRENT_TETR.r; 
+    for (var i = CURRENT_TETR.r; i <= 20; i++) {
         if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) highestRow = i; 
         else break
     }
-    console.log(highestRow + " " + CURRENT_TETR.r); 
     if(highestRow == CURRENT_TETR.r) return
     for (var i = 0; i < 4; i++) {
         const hoverBlock = document.createElement("div")
