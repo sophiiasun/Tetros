@@ -68,6 +68,8 @@ function getCurrentTime(currentTime) {
 
 function naturalDrop(currentTime) {
     window.requestAnimationFrame(naturalDrop)
+    document.getElementById("SCORE").innerHTML = "SCORE: " + SCORE
+    document.getElementById("LEVEL").innerHTML = "LEVEL: " + LEVEL
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
     if (secondsSinceLastRender < 1/DROP_SPEED) return
     lastRenderTime = currentTime
@@ -87,6 +89,7 @@ function naturalDrop(currentTime) {
             dropBlockEffect()
             storeBlocks()
             clearLine() 
+            SCORE += CURRENT_TETR.r*LEVEL
             CURRENT_TETR = comingBlocksQueue.shift()
             CURRENT_BLOCKS = []
             spawnTetr()

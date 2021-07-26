@@ -19,7 +19,8 @@ blockColoursMap.set("block-t", "#CC99C9")
 // wallkicks https://tetris.fandom.com/wiki/SRS
 var wallKickr = [8], wallKickc = [8], comingBlocksQueue = []; 
 //queue.shift pops the front 
-var OCCUPIED = [25][15]; 
+var OCCUPIED = [25][15], SCORE = 0, LEVEL = 1, clearedLineCounter = 0; 
+
 
 var iWallKickc = [
     [0, -1, 2, 2, -1], [0, 2, -1, 2, -1],
@@ -326,8 +327,8 @@ function dropBlockEffect() {
 
 function hardDrop() {
     removeTetr()
-    let highestRow = 1
-    for (var i = 2; i <= 20; i++) {
+    let highestRow = CURRENT_TETR.r
+    for (var i = CURRENT_TETR.r; i <= 20; i++) {
         if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) highestRow = i
         else break
     }
@@ -336,6 +337,7 @@ function hardDrop() {
     }
     HELDBLOCK = false 
     CURRENT_TETR.r = highestRow
+    SCORE += CURRENT_TETR.r*2*LEVEL 
     spawnTetr()
     dropBlockEffect()
     storeBlocks()
@@ -360,7 +362,16 @@ function clearLine() {
         if (!clearRows.includes(CURRENT_TETR.r + r) && checkRowClear(CURRENT_TETR.r + r)) 
             clearRows.push(CURRENT_TETR.r + r)
     })
-    if (clearRows.size == 0) return
+    if (clearRows.length == 0) return
+    if(clearRows.length == 1) SCORE += 100*LEVEL
+    else if(clearRows.length == 2) SCORE += 300*LEVEL
+    else if(clearRows.length == 3) SCORE += 500*LEVEL
+    else SCORE += 800*LEVEL
+    clearedLineCounter += clearRows.length
+    if(clearedLineCounter >= 10){
+        clearedLineCounter -= 10, LEVEL += 1
+        NATURAL_DROP_SPEED *= 1.41; DROP_SPEED *= 1.41;  
+    }
     clearRows.sort(function(a, b) { return a - b })
     let tmp = []
     BOARD_BLOCKS.forEach(block => {

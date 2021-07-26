@@ -29,7 +29,7 @@ function createScore() {
     gridElement.classList.add("score")
     gridElement.style.gridRowStart = 2
     gridElement.style.gridColumnStart = 2
-    gridElement.innerHTML = "SCORE"
+    gridElement.innerHTML = "SCORE: 0"
     var r = 2, c = 2
     const grid = {gridElement, r, c}
     template[r][c] = grid
@@ -90,7 +90,7 @@ function createLevel() {
     gridElement.classList.add("level")
     gridElement.style.gridRowStart = 5
     gridElement.style.gridColumnStart = 2
-    gridElement.innerHTML = "LEVEL"
+    gridElement.innerHTML = "LEVEL: 1"
     var r = 5, c = 2
     const grid = {gridElement, r, c}
     template[r][c] = grid
