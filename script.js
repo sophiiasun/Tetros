@@ -1,7 +1,7 @@
 // TEMPLATE PLANNING:
 // each block (for tetronimo) is 3vmin
 const TEMPLATE = document.getElementById("template")
-let GAMEBOARD, COMINGBLOCKS, HOLDBLOCK 
+let GAMEBOARD, COMINGBLOCKS, HOLDBLOCK, LOADINGBLOCKS
 var data = []
 var DROP_SPEED = 1, NATURAL_DROP_SPEED = 1
 var HELDBLOCK = false 
@@ -10,9 +10,10 @@ let lastRenderTime = 0
 let dropTime = 0
 let hasBlockMoved = true
 
-let gameStart = true
+let gameStart = true, isGameOver = false 
 
 document.onkeydown = function(e) {
+    if (isGameOver) return
     switch(e.which) {
         case 32: // space
             hardDrop()
@@ -43,6 +44,7 @@ document.onkeydown = function(e) {
 }
 
 document.onkeyup = function (e) {
+    if (isGameOver) return
     switch(e.which) {
         case 40 : // down
             DROP_SPEED = NATURAL_DROP_SPEED 
@@ -56,6 +58,7 @@ function main () {
     GAMEBOARD = document.getElementById("GAMEBOARD")
     COMINGBLOCKS = document.getElementById("COMING-BLOCKS")
     HOLDBLOCK = document.getElementById("HOLD-BLOCK")
+    LOADINGBLOCKS = document.getElementById("LOADING-BLOCK")
     blockGenerator(); blockGenerator(); blockGenerator()
     spawnTetr()
     displayComingBlocks()
@@ -67,6 +70,7 @@ function getCurrentTime(currentTime) {
 }
 
 function naturalDrop(currentTime) {
+    if(isGameOver) return 
     window.requestAnimationFrame(naturalDrop)
     document.getElementById("SCORE").innerHTML = "SCORE: " + SCORE
     document.getElementById("LEVEL").innerHTML = "LEVEL: " + LEVEL
@@ -108,8 +112,12 @@ function playMusicBGM() {
     BGM.loop = true
 }
 
-window.requestAnimationFrame(naturalDrop)
+function endGame(){
+    removeHoverBlock()
+    document.getElementById("SCORE").innerHTML = "GAME OVER"
+}
 
+window.requestAnimationFrame(naturalDrop)
 
 
 

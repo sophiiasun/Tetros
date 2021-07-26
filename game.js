@@ -96,3 +96,4 @@ function createLevel() {
     template[r][c] = grid
     TEMPLATE.appendChild(gridElement)
 }
+

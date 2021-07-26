@@ -180,7 +180,7 @@ class Tetromino {
         while(copy.rot != rot) copy.rotateClockwise(); 
         for(var i = 0; i < 4; i++) {
             var tmpRow = copy.rArray[i] + copy.r, tmpColumn = copy.cArray[i] + copy.c; 
-            if(tmpRow < 1 || tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10 || OCCUPIED[tmpRow][tmpColumn] == true) return true
+            if(tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10 || (tmpRow > 0 && OCCUPIED[tmpRow][tmpColumn] == true) ) return true
         }
         return false
     }
@@ -194,7 +194,7 @@ class Tetromino {
 function shuffle(array) {
     var currentIndex = array.length, randomIndex;
     while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
+        randomIndex = Math.floor(Math.random() * currentIndex); 
         currentIndex--;
         [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
@@ -204,7 +204,7 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(2, 5, i, 0); 
+        arr[i] = new Tetromino(-3, 5, i, 0); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){
@@ -213,14 +213,17 @@ function blockGenerator(){
     return arr; 
 }
 
-CURRENT_BLOCKS = []
+
+let CURRENT_BLOCKS = [], LOADING_BLOCKS = []
 
 function removeTetr() {
-    if (CURRENT_BLOCKS.length == 0) return
     CURRENT_BLOCKS.forEach(blockElement => {
         GAMEBOARD.removeChild(blockElement)
     })
-    CURRENT_BLOCKS = []
+    LOADING_BLOCKS.forEach(blockElement => { 
+        LOADINGBLOCKS.removeChild(blockElement)
+    })
+    CURRENT_BLOCKS = [], LOADING_BLOCKS = []
 }
 
 // i j l o s t z 
@@ -232,10 +235,19 @@ function spawnTetr() {
     for(var i = 0; i < 4; i++){
         const blockElement = document.createElement("div")
         blockElement.classList.add(CURRENT_TETR.name)
-        blockElement.style.gridRowStart = CURRENT_TETR.r + CURRENT_TETR.rArray[i]; 
-        blockElement.style.gridColumnStart = CURRENT_TETR.c + CURRENT_TETR.cArray[i]; 
-        GAMEBOARD.appendChild(blockElement)
-        CURRENT_BLOCKS.push(blockElement)
+        var gridRow = CURRENT_TETR.r + CURRENT_TETR.rArray[i]; 
+        var gridColumn = CURRENT_TETR.c + CURRENT_TETR.cArray[i];
+        blockElement.style.gridColumnStart = gridColumn
+        if(gridRow <= 0) {
+            blockElement.style.gridRowStart = 4 + gridRow
+            LOADINGBLOCKS.appendChild(blockElement)
+            LOADING_BLOCKS.push(blockElement)
+        }
+        else {
+            blockElement.style.gridRowStart = gridRow
+            GAMEBOARD.appendChild(blockElement)
+            CURRENT_BLOCKS.push(blockElement)
+        } 
     }
 }
 
@@ -270,7 +282,7 @@ function swapTetr() {
     tmp = CURRENT_TETR
     CURRENT_TETR = HELD_TETR
     HELD_TETR = tmp
-    CURRENT_TETR.r = 2
+    CURRENT_TETR.r = -3
     CURRENT_TETR.c = 5
     removeTetr()
     displayHoldBlock()
@@ -321,19 +333,30 @@ function clearHoldBlock() {
 function dropBlockEffect() {
     CURRENT_BLOCKS.forEach(block => {
         block.style.borderColor = "#7F7F7F"
-        // block.style.borderColor = blockColoursMap.get(CURRENT_TETR.name)
+    })
+    LOADING_BLOCKS.forEach(block => {
+        block.style.borderColor = "#7F7F7F"
     })
 }
 
 function hardDrop() {
     removeTetr()
     let highestRow = CURRENT_TETR.r
-    for (var i = CURRENT_TETR.r; i <= 20; i++) {
+    for (var i = highestRow; i <= 20; i++) {
         if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) highestRow = i
         else break
     }
+    CURRENT_TETR.r = highestRow; 
     for(var i = 0; i < 4; i++){
-        OCCUPIED [highestRow + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
+        if(highestRow + CURRENT_TETR.rArray[i] > 0){
+            OCCUPIED [highestRow + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true;
+        } 
+        else{
+            isGameOver = true; spawnTetr()
+            dropBlockEffect()
+            endGame()
+            return
+        }
     }
     HELDBLOCK = false 
     CURRENT_TETR.r = highestRow
@@ -411,12 +434,12 @@ function checkRowClear(row) {
     return true
 }
 
-let HOVER_BLOCKS = []
+let HOVER_BLOCKS = [], HOVER_LOADING_BLOCKS = []
 
 function displayHoverBlock() {
     removeHoverBlock()
     let highestRow = CURRENT_TETR.r; 
-    for (var i = CURRENT_TETR.r; i <= 20; i++) {
+    for (var i = highestRow; i <= 20; i++) {
         if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) highestRow = i; 
         else break
     }
@@ -427,15 +450,24 @@ function displayHoverBlock() {
         hoverBlock.style.gridRowStart = highestRow + CURRENT_TETR.rArray[i]
         hoverBlock.style.gridColumnStart = CURRENT_TETR.c +  CURRENT_TETR.cArray[i]
         hoverBlock.style.borderColor = blockColoursMap.get(CURRENT_TETR.name)
-        GAMEBOARD.appendChild(hoverBlock)
-        HOVER_BLOCKS.push(hoverBlock)
+        if(hoverBlock.style.gridRowStart <= 0){
+            hoverBlock.style.gridRowStart += 4 
+            LOADINGBLOCKS.appendChild(hoverBlock)
+            HOVER_LOADING_BLOCKS.push(hoverBlock) 
+        }
+        else{
+            GAMEBOARD.appendChild(hoverBlock)
+            HOVER_BLOCKS.push(hoverBlock)
+        }
     }
 }
 
 function removeHoverBlock() {
-    if (HOVER_BLOCKS.length == 0) return
     HOVER_BLOCKS.forEach(block => {
         GAMEBOARD.removeChild(block)
     })
-    HOVER_BLOCKS = []
+    HOVER_LOADING_BLOCKS.forEach(block => {
+        LOADINGBLOCKS.removeChild(block)
+    })
+    HOVER_BLOCKS = [], HOVER_LOADING_BLOCKS = []
 }
