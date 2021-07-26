@@ -208,6 +208,7 @@ blockGenerator();
 CURRENT_TETR = comingBlocksQueue.shift(); 
 
 function spawnTetr() {
+    displayHoverBlock()
     for(var i = 0; i < 4; i++){
         const blockElement = document.createElement("div")
         blockElement.classList.add(CURRENT_TETR.name)
@@ -216,7 +217,6 @@ function spawnTetr() {
         GAMEBOARD.appendChild(blockElement)
         CURRENT_BLOCKS.push(blockElement)
     }
-    displayHoverBlock()
 }
 
 COMING_BLOCKS = []
@@ -290,19 +290,6 @@ function displayComingBlocks() {
     }
 }
 
-function testDisplay() {
-    clearComingBlocks()
-    var tetr = new Tetromino(0, 0, 0)
-    for(var i = 0; i < 4; i++){
-        const blockElement = document.createElement("div")
-        blockElement.classList.add(CURRENT_TETR.name)
-        blockElement.style.gridRowStart = 3 + CURRENT_TETR.rArray[i]; 
-        blockElement.style.gridColumnStart = 3 + CURRENT_TETR.cArray[i]; 
-        COMINGBLOCKS.appendChild(blockElement)
-        COMING_BLOCKS.push(blockElement)
-    }
-}
-
 function clearHoldBlock() {
     if (HOLD_BLOCKS.length == 0) return
     HOLD_BLOCKS.forEach(blockElement => {
@@ -320,16 +307,16 @@ function dropBlockEffect() {
 
 function hardDrop() {
     removeTetr()
-    for (var i = 20; i >= 2; i--) {
-        if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) {
-            CURRENT_TETR.r = i; 
-            for(var i = 0; i < 4; i++){
-                OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
-            }
-            break
-        }
+    let highestRow = 1
+    for (var i = 2; i <= 20; i++) {
+        if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) highestRow = i
+        else break
+    }
+    for(var i = 0; i < 4; i++){
+        OCCUPIED [highestRow + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
     }
     HELDBLOCK = false 
+    CURRENT_TETR.r = highestRow
     spawnTetr()
     dropBlockEffect()
     storeBlocks()
@@ -399,10 +386,9 @@ let HOVER_BLOCKS = []
 function displayHoverBlock() {
     removeHoverBlock()
     let highestRow 
-    for (var i = 20; i >= 2; i--) {
-        if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) {
-            highestRow = i; break
-        }
+    for (var i = 2; i <= 20; i++) {
+        if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) highestRow = i; 
+        else break
     }
     console.log(highestRow + " " + CURRENT_TETR.r); 
     if(highestRow == CURRENT_TETR.r) return
