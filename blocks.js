@@ -426,6 +426,7 @@ function displayHoverBlock() {
         hoverBlock.classList.add("hover-block")
         hoverBlock.style.gridRowStart = highestRow + CURRENT_TETR.rArray[i]
         hoverBlock.style.gridColumnStart = CURRENT_TETR.c +  CURRENT_TETR.cArray[i]
+        hoverBlock.style.borderColor = blockColoursMap.get(CURRENT_TETR.name)
         GAMEBOARD.appendChild(hoverBlock)
         HOVER_BLOCKS.push(hoverBlock)
     }
