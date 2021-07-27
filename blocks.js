@@ -484,7 +484,7 @@ function removeHoverBlock() {
 
 function clearBoardBlocks() {
     BOARD_BLOCKS.forEach(block => {
-        GAMEBOARD.remove(block)
+        GAMEBOARD.removeChild(block)
     })
     BOARD_BLOCKS = []
 }
