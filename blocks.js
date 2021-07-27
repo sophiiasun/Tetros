@@ -83,6 +83,15 @@ class Tetromino {
             this.cArray = [-1, 0, 0, 1]; this.rArray = [-1, -1, 0, 0]; this.name = "block-z"
         }
     }
+    checkTspin(){
+        if(this.type!=5) return false 
+        var dRow = [0, 0, 1, -1], dCol = [1, -1, 0, 0]; 
+        var curR = this.r, curC = this.c, curRot = this.rot
+        for(var i = 0; i < 4; i++){
+            if(!this.checkOccupied(curR + dRow[i], curC + dCol[i], curRot)) return false 
+        }
+        return true 
+    }
     rotateClockwise(){
         for (var i = 0; i < 4; i++) {
             var tmp = this.cArray[i]; this.cArray[i] = this.rArray[i]; this.rArray[i] = tmp
@@ -390,10 +399,16 @@ async function clearLine() {
             clearRows.push(CURRENT_TETR.r + r)
     })
     if (clearRows.length == 0) return
-    if(clearRows.length == 1) SCORE += 100*LEVEL
-    else if(clearRows.length == 2) SCORE += 300*LEVEL
-    else if(clearRows.length == 3) SCORE += 500*LEVEL
-    else SCORE += 800*LEVEL
+    if(CURRENT_TETR.checkTspin()){
+        if(clearRows.length == 1) SCORE += 800*LEVEL
+        else if(clearRows.length == 2) SCORE += 1200*LEVEL
+        else SCORE += 1600*LEVEL
+    } else{
+        if(clearRows.length == 1) SCORE += 100*LEVEL
+        else if(clearRows.length == 2) SCORE += 300*LEVEL
+        else if(clearRows.length == 3) SCORE += 500*LEVEL
+        else SCORE += 800*LEVEL
+    }
     clearedLineCounter += clearRows.length
     if(clearedLineCounter >= 10){
         clearedLineCounter -= 10, LEVEL += 1
