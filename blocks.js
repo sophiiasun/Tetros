@@ -481,3 +481,18 @@ function removeHoverBlock() {
     })
     HOVER_BLOCKS = [], HOVER_LOADING_BLOCKS = []
 }
+
+function clearBoardBlocks() {
+    BOARD_BLOCKS.forEach(block => {
+        GAMEBOARD.remove(block)
+    })
+    BOARD_BLOCKS = []
+}
+
+function clearAllBlocks() {
+    removeHoverBlock()
+    removeTetr()
+    clearHoldBlock()
+    clearComingBlocks()
+    clearBoardBlocks()
+}
