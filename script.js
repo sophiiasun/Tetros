@@ -5,6 +5,9 @@ let GAMEBOARD, COMINGBLOCKS, HOLDBLOCK, LOADINGBLOCKS
 var data = []
 var DROP_SPEED = 1, NATURAL_DROP_SPEED = 1
 var HELDBLOCK = false 
+var keyStates = [110]
+
+keyStates = Array.from({ length: 110 }, () => false);
 
 let lastRenderTime = 0
 let dropTime = 0
@@ -14,42 +17,38 @@ let gameStart = true, isGameOver = false
 
 document.onkeydown = function(e) {
     if (isGameOver) return
+    keyStates[e.which] = true
     switch(e.which) {
         case 32: // space
             hardDrop()
             break
-        case 37: // left
-            CURRENT_TETR.hTranslate(0)
-            break
-        case 38: // up
+        case 38: // up 
             CURRENT_TETR.wallKickRotateClockwise()
             break
-        case 39: // right
-            CURRENT_TETR.hTranslate(1)
-            break
-        case 90 : // z key
+        case 90: // z 
             CURRENT_TETR.wallKickRotateCounterClockwise() 
-            break  
-        case 40: // down
-            DROP_SPEED = NATURAL_DROP_SPEED * 30
-            break
-        case 67: // letter c
-            if(HELDBLOCK == false) {
-                HELDBLOCK = true 
-                holdBlock()
-            }
-            break
     }
     if (gameStart) { playMusicBGM(); gameStart = false }
 }
 
+function gameLoop() {
+    if (keyStates[37]) CURRENT_TETR.hTranslate(0)
+    if (keyStates[39]) CURRENT_TETR.hTranslate(1)
+    if(keyStates[40]) DROP_SPEED = NATURAL_DROP_SPEED * 30
+    else DROP_SPEED = NATURAL_DROP_SPEED 
+    if(keyStates[67]) {
+        if(HELDBLOCK == false) {
+            HELDBLOCK = true 
+            holdBlock()
+        }  
+    }
+    setTimeout(gameLoop, 75);
+}    
+gameLoop();
+
 document.onkeyup = function (e) {
     if (isGameOver) return
-    switch(e.which) {
-        case 40 : // down
-            DROP_SPEED = NATURAL_DROP_SPEED 
-            break
-    }
+    keyStates[e.which] = false
 }
 
 main()
