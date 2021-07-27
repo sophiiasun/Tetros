@@ -378,9 +378,11 @@ function storeBlocks() {
         BOARD_BLOCKS.push(block)
     })
 }
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
+
 async function clearLine() {
     let clearRows = []
     CURRENT_TETR.rArray.forEach(r => {
@@ -401,10 +403,10 @@ async function clearLine() {
     let tmp = []
     BOARD_BLOCKS.forEach(block => {
         clearRows.forEach(row => {
-            if (row == block.style.gridRowStart) block.style.borderColor = "#d3d3d3"
+            if (row == block.style.gridRowStart) block.style.borderColor = "white"
         })
     })
-    await sleep (150) 
+    await sleep (200) 
     BOARD_BLOCKS.forEach(block => {
         var cnt = 0 // number of rows to shift up
         clearRows.forEach(row => {
