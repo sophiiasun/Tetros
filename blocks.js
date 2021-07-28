@@ -421,7 +421,7 @@ async function clearLine() {
         else if(clearRows.length == 2) SCORE += 300*LEVEL
         else if(clearRows.length == 3) SCORE += 500*LEVEL
         else SCORE += 800*LEVEL
-        if(btob && clearRows.length == 4) score += 400*LEVEL 
+        if(btob && clearRows.length == 4) SCORE += 400*LEVEL 
     }
     if(CURRENT_TETR.checkTspin() || clearRows.length == 4) btob = true
     else btob = false 
