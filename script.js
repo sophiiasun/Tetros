@@ -104,6 +104,8 @@ function naturalDrop(currentTime) {
     }
 }
 
+window.requestAnimationFrame(naturalDrop)
+
 function playMusicBGM() {
     const BGM = new Audio('tetris BGM.mp3')
     BGM.volume = 0.1
@@ -111,12 +113,20 @@ function playMusicBGM() {
     BGM.loop = true
 }
 
-function endGame(){
+function endGame() {
     removeHoverBlock()
     document.getElementById("SCORE").innerHTML = "GAME OVER"
+    createOverlay()
+    // window.setTimeout(restartGame, 2000)
 }
 
-window.requestAnimationFrame(naturalDrop)
+function restartGame() {
+    clearAllBlocks()
+    SCORE = 0
+    document.getElementById("SCORE").innerHTML = "SCORE: 0"
+}
+
+
 
 
 
