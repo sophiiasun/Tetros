@@ -133,7 +133,6 @@ function restartGame() {
     SCORE = 0
     LEVEL = 1
     isGameOver = false
-    isGameStart = true
     HELDBLOCK = false
     DROP_SPEED = 1
     NATURAL_DROP_SPEED = 1
@@ -143,8 +142,8 @@ function restartGame() {
     comingBlocksQueue = []
     blockGenerator(); blockGenerator(); blockGenerator()
     CURRENT_TETR = comingBlocksQueue.shift()
-    spawnTetr()
+    CURRENT_TETR.r = -3
     displayComingBlocks()
+    spawnTetr()
     naturalDrop()
-    window.requestAnimationFrame(naturalDrop)
 }
