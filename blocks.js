@@ -21,6 +21,7 @@ var wallKickr = [8], wallKickc = [8], comingBlocksQueue = [];
 //queue.shift pops the front 
 var OCCUPIED = [25][15], SCORE = 0, LEVEL = 1, clearedLineCounter = 0; 
 
+var btob = false;
 
 var iWallKickc = [
     [0, -2, 1, -2, 1], [0, 2, -1, 2, -1],
@@ -403,12 +404,20 @@ async function clearLine() {
         if(clearRows.length == 1) SCORE += 800*LEVEL
         else if(clearRows.length == 2) SCORE += 1200*LEVEL
         else SCORE += 1600*LEVEL
+        if(btob){
+            if(clearRows.length == 1) SCORE += 400*LEVEL
+            else if(clearRows.length == 2) SCORE += 600*LEVEL
+            else SCORE += 800*LEVEL
+        }
     } else{
         if(clearRows.length == 1) SCORE += 100*LEVEL
         else if(clearRows.length == 2) SCORE += 300*LEVEL
         else if(clearRows.length == 3) SCORE += 500*LEVEL
         else SCORE += 800*LEVEL
+        if(btob && clearRows.length == 4) score += 400*LEVEL 
     }
+    if(CURRENT_TETR.checkTspin() || clearRows.length == 4) btob = true
+    else btob = false 
     clearedLineCounter += clearRows.length
     if(clearedLineCounter >= 10){
         clearedLineCounter -= 10, LEVEL += 1
