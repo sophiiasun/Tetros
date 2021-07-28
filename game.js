@@ -99,6 +99,13 @@ function createLevel() {
 
 function createOverlay() {
     let overlay = document.getElementById("overlay")
-    overlay.style.display = "grid"
+    overlay.style.backgroundColor = "purple"
+    overlay.style.borderColor = "green"
+    const title = document.createElement("div")
+    title.classList.add("overlay-title")
+    title.style.gridRowStart = 1
+    title.style.gridColumnStart = 1
+    title.innerHTML = "GAME OVER!"
+    overlay.appendChild(title)
 }
 
