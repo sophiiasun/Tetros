@@ -299,7 +299,7 @@ function swapTetr() {
     tmp = CURRENT_TETR
     CURRENT_TETR = HELD_TETR
     HELD_TETR = tmp
-    CURRENT_TETR.r = -3
+    CURRENT_TETR.r = -1
     CURRENT_TETR.c = 5
     removeTetr()
     displayHoldBlock()
