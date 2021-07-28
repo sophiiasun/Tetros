@@ -104,6 +104,7 @@ function createOverlay() {
     // title
     const title = document.createElement("div")
     title.classList.add("overlay-title")
+    title.id = "OVERLAY TITLE"
     title.style.gridRowStart = 1
     title.style.gridColumnStart = 1
     title.innerHTML = "GAME OVER!"
@@ -111,6 +112,7 @@ function createOverlay() {
     // body
     const body = document.createElement("div")
     body.classList.add("overlay-body")
+    body.id = "OVERLAY BODY"
     body.style.gridRowStart = 2
     body.style.gridColumnStart = 1
     body.innerHTML = "<strong>YOUR SCORE:</strong> " + SCORE + "&emsp;&emsp;&emsp;<strong>YOUR LEVEL:</strong> " + LEVEL
@@ -118,7 +120,16 @@ function createOverlay() {
     // button
     const button = document.createElement("button")
     button.classList.add("overlay-button")
+    button.id = "OVERLAY BUTTON"
     button.onclick = function() {restartGame()}
     button.innerHTML = "RESTART"
     overlay.appendChild(button)
+}
+
+function removeOverlay() {
+    overlay.removeChild(document.getElementById("OVERLAY TITLE"))
+    overlay.removeChild(document.getElementById("OVERLAY BODY"))
+    overlay.removeChild(document.getElementById("OVERLAY BUTTON"))
+    overlay.style.backgroundColor = "transparent"
+    overlay.style.borderColor = "transparent"
 }

@@ -13,7 +13,7 @@ let lastRenderTime = 0
 let dropTime = 0
 let hasBlockMoved = true
 
-let gameStart = true, isGameOver = false 
+let isGameStart = true, isGameOver = false 
 
 document.onkeydown = function(e) {
     if (isGameOver) return
@@ -28,7 +28,7 @@ document.onkeydown = function(e) {
         case 90: // z 
             CURRENT_TETR.wallKickRotateCounterClockwise() 
     }
-    if (gameStart) { playMusicBGM(); gameStart = false }
+    if (isGameStart) { playMusicBGM(); isGameStart = false }
 }
 
 function gameLoop() {
@@ -61,7 +61,6 @@ function main () {
     blockGenerator(); blockGenerator(); blockGenerator()
     spawnTetr()
     displayComingBlocks()
-    naturalDrop()
 }
 
 function getCurrentTime(currentTime) {
@@ -129,7 +128,20 @@ function endGame() {
 }
 
 function restartGame() {
+    removeOverlay()
     clearAllBlocks()
     SCORE = 0
-    document.getElementById("SCORE").innerHTML = "SCORE: 0"
+    LEVEL = 1
+    isGameOver = false
+    isGameStart = true
+    HELDBLOCK = false
+    DROP_SPEED = 1
+    NATURAL_DROP_SPEED = 1
+    lastRenderTime = 0
+    dropTime = 0
+    hasBlockMoved = true
+    spawnTetr()
+    displayComingBlocks()
+    naturalDrop()
+    window.requestAnimationFrame(naturalDrop)
 }
