@@ -221,7 +221,7 @@ function shuffle(array) {
 function blockGenerator(){
     var arr = [7]; 
     for(var i = 0; i < 7; i++){
-        arr[i] = new Tetromino(-2, 5, i, 0); 
+        arr[i] = new Tetromino(-1, 5, i, 0); 
     }
     arr = shuffle(arr); 
     for(var i = 0; i < 7; i++){
@@ -530,4 +530,8 @@ function clearAllBlocks() {
     clearHoldBlock()
     clearComingBlocks()
     clearBoardBlocks()
+    for (var i = 0; i < 25; i++) {
+        for (var j = 0; j < 15; j++) 
+            OCCUPIED[i][j] = false
+    }
 }

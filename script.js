@@ -42,7 +42,7 @@ function gameLoop() {
             holdBlock()
         }  
     }
-    setTimeout(gameLoop, 75);
+    setTimeout(gameLoop, 30);
 }    
 gameLoop();
 
@@ -140,6 +140,7 @@ function restartGame() {
     lastRenderTime = 0
     dropTime = 0
     hasBlockMoved = true
+    CURRENT_TETR = comingBlocksQueue.shift()
     spawnTetr()
     displayComingBlocks()
     naturalDrop()
