@@ -148,6 +148,13 @@ class Tetromino {
         }
         this.respawnBlock()
     }
+    getTop() {
+        var top = 100; 
+        for(var i = 0; i < 4; i++){
+            top = Math.min(top, this.rArray[i] + this.r); 
+        }
+        return top; 
+    }
     getBot() {
         var top = 0; 
         for(var i = 0; i < 4; i++){
@@ -190,7 +197,7 @@ class Tetromino {
         while(copy.rot != rot) copy.rotateClockwise(); 
         for(var i = 0; i < 4; i++) {
             var tmpRow = copy.rArray[i] + copy.r, tmpColumn = copy.cArray[i] + copy.c; 
-            if(tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10 || (tmpRow > 0 && OCCUPIED[tmpRow][tmpColumn] == true) ) return true
+            if(tmpRow > 20 || tmpColumn < 1 || tmpColumn > 10 || (tmpRow >= 0 && OCCUPIED[tmpRow][tmpColumn] == true) ) return true
         }
         return false
     }
@@ -470,6 +477,7 @@ function checkRowClear(row) {
 
 let HOVER_BLOCKS = [], HOVER_LOADING_BLOCKS = []
 
+
 function displayHoverBlock() {
     removeHoverBlock()
     let highestRow = CURRENT_TETR.r; 
@@ -477,19 +485,22 @@ function displayHoverBlock() {
         if (!CURRENT_TETR.checkOccupied(i, CURRENT_TETR.c, CURRENT_TETR.rot)) highestRow = i; 
         else break
     }
+    // CURRENT_TETR.r = highestRow; 
     if(highestRow == CURRENT_TETR.r) return
     for (var i = 0; i < 4; i++) {
         const hoverBlock = document.createElement("div")
         hoverBlock.classList.add("hover-block")
-        hoverBlock.style.gridRowStart = highestRow + CURRENT_TETR.rArray[i]
-        hoverBlock.style.gridColumnStart = CURRENT_TETR.c +  CURRENT_TETR.cArray[i]
+        var gridRow = highestRow + CURRENT_TETR.rArray[i]; 
+        var gridColumn = CURRENT_TETR.c + CURRENT_TETR.cArray[i];
         hoverBlock.style.borderColor = blockColoursMap.get(CURRENT_TETR.name)
-        if(hoverBlock.style.gridRowStart <= 0){
-            hoverBlock.style.gridRowStart += 4 
+        hoverBlock.style.gridColumnStart = gridColumn
+        if(gridRow <= 0){
+            hoverBlock.style.gridRowStart = gridRow + 4
             LOADINGBLOCKS.appendChild(hoverBlock)
             HOVER_LOADING_BLOCKS.push(hoverBlock) 
         }
         else{
+            hoverBlock.style.gridRowStart = gridRow
             GAMEBOARD.appendChild(hoverBlock)
             HOVER_BLOCKS.push(hoverBlock)
         }
