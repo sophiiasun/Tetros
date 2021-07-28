@@ -25,26 +25,35 @@ document.onkeydown = function(e) {
         case 32: // space
             hardDrop()
             break
-        case 38: // up 
+        case 37: // left
+            CURRENT_TETR.hTranslate(0)
+            break
+        case 38: // up
             CURRENT_TETR.wallKickRotateClockwise()
             break
-        case 90: // z 
+        case 39: // right
+            CURRENT_TETR.hTranslate(1)
+            break
+        case 90 : // z key
             CURRENT_TETR.wallKickRotateCounterClockwise() 
+            break  
+        case 40: // down
+            DROP_SPEED = NATURAL_DROP_SPEED * 30
+            break
+        case 67: // letter c
+            if(HELDBLOCK == false) {
+                HELDBLOCK = true 
+                holdBlock()
+            }
+            break
     }
     if (isGameStart) { playMusicBGM(); isGameStart = false }
 }
 
 function gameLoop() {
     var curTime = new Date().getTime()
-    var timeOut = 80 
-    if (keyStates[37]){
-        CURRENT_TETR.hTranslate(0)
-        if(curTime - keyTime[37] >= 100) timeOut = 30
-    }
-    if (keyStates[39]){
-        CURRENT_TETR.hTranslate(1)
-        if(curTime - keyTime[39] >= 100) timeOut = 30
-    }
+    if (keyStates[37] && curTime - keyTime[37] >= 100) CURRENT_TETR.hTranslate(0)
+    if (keyStates[39] && curTime - keyTime[39] >= 100) CURRENT_TETR.hTranslate(1)
     if(keyStates[40]) DROP_SPEED = NATURAL_DROP_SPEED * 30
     else DROP_SPEED = NATURAL_DROP_SPEED 
     if(keyStates[67]) {
@@ -53,7 +62,7 @@ function gameLoop() {
             holdBlock()
         }  
     }
-    setTimeout(gameLoop, timeOut);
+    setTimeout(gameLoop, 30);
 }    
 gameLoop();
 
