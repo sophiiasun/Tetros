@@ -21,7 +21,7 @@ var wallKickr = [8], wallKickc = [8], comingBlocksQueue = [];
 //queue.shift pops the front 
 var OCCUPIED = [25][15], SCORE = 0, LEVEL = 1, clearedLineCounter = 0; 
 
-var btob = false;
+var btob = false, clearingLines = false;
 
 var iWallKickc = [
     [0, -2, 1, -2, 1], [0, 2, -1, 2, -1],
@@ -437,7 +437,9 @@ async function clearLine() {
             if (row == block.style.gridRowStart) block.style.borderColor = "white"
         })
     })
+    clearingLines = true 
     await sleep (200) 
+    clearingLines = false
     BOARD_BLOCKS.forEach(block => {
         var cnt = 0 // number of rows to shift up
         clearRows.forEach(row => {

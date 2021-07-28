@@ -93,7 +93,7 @@ function naturalDrop(currentTime) {
     document.getElementById("SCORE").innerHTML = "SCORE: " + SCORE
     document.getElementById("LEVEL").innerHTML = "LEVEL: " + LEVEL
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
-    if (secondsSinceLastRender < 1/DROP_SPEED) return
+    if (secondsSinceLastRender < 1/DROP_SPEED || clearingLines) return
     lastRenderTime = currentTime
 
     if (comingBlocksQueue.length < 20) blockGenerator()
