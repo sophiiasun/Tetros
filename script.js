@@ -142,8 +142,7 @@ function restartGame() {
     comingBlocksQueue = []
     blockGenerator(); blockGenerator(); blockGenerator()
     CURRENT_TETR = comingBlocksQueue.shift()
-    CURRENT_TETR.r = -3
     displayComingBlocks()
     spawnTetr()
-    naturalDrop()
+    window.RequestAnimationFrame(naturalDrop)
 }
