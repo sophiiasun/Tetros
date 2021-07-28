@@ -140,6 +140,8 @@ function restartGame() {
     lastRenderTime = 0
     dropTime = 0
     hasBlockMoved = true
+    comingBlocksQueue = []
+    blockGenerator(); blockGenerator(); blockGenerator()
     CURRENT_TETR = comingBlocksQueue.shift()
     spawnTetr()
     displayComingBlocks()
