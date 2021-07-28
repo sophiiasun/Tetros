@@ -5,9 +5,10 @@ let GAMEBOARD, COMINGBLOCKS, HOLDBLOCK, LOADINGBLOCKS
 var data = []
 var DROP_SPEED = 1, NATURAL_DROP_SPEED = 1
 var HELDBLOCK = false 
-var keyStates = [110]
+var keyStates = [110], keyTime = [101]
 
 keyStates = Array.from({ length: 110 }, () => false);
+keyStates = Array.from({ length: 110 }, () => 0);
 
 let lastRenderTime = 0
 let dropTime = 0
@@ -18,6 +19,8 @@ let isGameStart = true, isGameOver = false
 document.onkeydown = function(e) {
     if (isGameOver) return
     keyStates[e.which] = true
+    keyTime[e.which] = new Date().getTime()
+    // console.log(keyTime[e.which])
     switch(e.which) {
         case 32: // space
             hardDrop()
@@ -32,8 +35,16 @@ document.onkeydown = function(e) {
 }
 
 function gameLoop() {
-    if (keyStates[37]) CURRENT_TETR.hTranslate(0)
-    if (keyStates[39]) CURRENT_TETR.hTranslate(1)
+    var curTime = new Date().getTime()
+    var timeOut = 80 
+    if (keyStates[37]){
+        CURRENT_TETR.hTranslate(0)
+        if(curTime - keyTime[37] >= 100) timeOut = 30
+    }
+    if (keyStates[39]){
+        CURRENT_TETR.hTranslate(1)
+        if(curTime - keyTime[39] >= 100) timeOut = 30
+    }
     if(keyStates[40]) DROP_SPEED = NATURAL_DROP_SPEED * 30
     else DROP_SPEED = NATURAL_DROP_SPEED 
     if(keyStates[67]) {
@@ -42,7 +53,7 @@ function gameLoop() {
             holdBlock()
         }  
     }
-    setTimeout(gameLoop, 30);
+    setTimeout(gameLoop, timeOut);
 }    
 gameLoop();
 
