@@ -87,6 +87,12 @@ function naturalDrop(currentTime) {
         if (hasBlockMoved == true) dropTime = currentTime
         if ((currentTime - dropTime)/1000 >= 1) {
             for(var i = 0; i < 4; i++){
+                if(CURRENT_TETR.r + CURRENT_TETR.rArray[i]<=0){
+                    isGameOver = true; spawnTetr()
+                    dropBlockEffect()
+                    endGame()
+                    return
+                }
                 OCCUPIED [CURRENT_TETR.r + CURRENT_TETR.rArray[i]][CURRENT_TETR.c + CURRENT_TETR.cArray[i]] = true; 
             }
             dropBlockEffect()
