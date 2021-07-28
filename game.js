@@ -99,13 +99,26 @@ function createLevel() {
 
 function createOverlay() {
     let overlay = document.getElementById("overlay")
-    overlay.style.backgroundColor = "purple"
-    overlay.style.borderColor = "green"
+    overlay.style.backgroundColor = "black"
+    overlay.style.borderColor = "white"
+    // title
     const title = document.createElement("div")
     title.classList.add("overlay-title")
     title.style.gridRowStart = 1
     title.style.gridColumnStart = 1
     title.innerHTML = "GAME OVER!"
     overlay.appendChild(title)
+    // body
+    const body = document.createElement("div")
+    body.classList.add("overlay-body")
+    body.style.gridRowStart = 2
+    body.style.gridColumnStart = 1
+    body.innerHTML = "<strong>YOUR SCORE:</strong> " + SCORE + "&emsp;&emsp;&emsp;<strong>YOUR LEVEL:</strong> " + LEVEL
+    overlay.appendChild(body)
+    // button
+    const button = document.createElement("button")
+    button.classList.add("overlay-button")
+    button.onclick = function() {restartGame()}
+    button.innerHTML = "RESTART"
+    overlay.appendChild(button)
 }
-

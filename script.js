@@ -118,7 +118,6 @@ function playMusicBGM() {
 }
 
 function endGame(){
-    removeHoverBlock()
     document.getElementById("SCORE").innerHTML = "GAME OVER"
 }
 
