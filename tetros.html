@@ -167,11 +167,21 @@
             border-width: 1px;
         }
 
+        .overlay {
+            position: fixed; 
+            width: 50vmin; 
+            height: 20vmin; 
+            display: none;
+            background-color: purple;
+            z-index: 10;  
+        }
+
 	</style>
 </head>
 <body>
 	<p>
     <div id="template"></div>
+    <div id="overlay"></div>
 	</p>
 </body>
 <script src="game.js"></script>

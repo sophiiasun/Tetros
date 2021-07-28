@@ -97,3 +97,8 @@ function createLevel() {
     TEMPLATE.appendChild(gridElement)
 }
 
+function createOverlay() {
+    let overlay = document.getElementById("overlay")
+    overlay.style.display = "grid"
+}
+
